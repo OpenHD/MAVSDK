@@ -258,7 +258,7 @@ private:
     void* _timeout_cookie = nullptr;
 
     std::mutex _all_params_mutex{};
-    GetAllParamsCallback _all_params_callback;
+    GetAllParamsCallback _all_params_callback= nullptr;
     void* _all_params_timeout_cookie{nullptr};
     ParamSetFromServer _param_set_from_server;
 
