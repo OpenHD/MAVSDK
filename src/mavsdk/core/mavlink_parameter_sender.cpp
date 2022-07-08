@@ -976,7 +976,7 @@ void MavlinkParameterSender::check_all_params_timeout() {
             const auto first_missing_param=missing_param_indices.at(0);
             LogDebug()<<"Requesting missing parameter "<<(int)first_missing_param;
             auto new_work = std::make_shared<WorkItem>(_timeout_s_callback(),
-                                                       WorkItemGet{first_missing_param,create_recursive_callback()}, this);
+                                                       WorkItemGet{static_cast<int16_t>(first_missing_param),create_recursive_callback()}, this);
             _work_queue.push_back(new_work);
         }
     }
