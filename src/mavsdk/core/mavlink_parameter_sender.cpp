@@ -585,6 +585,9 @@ void MavlinkParameterSender::do_work()
 
 void MavlinkParameterSender::process_param_value(const mavlink_message_t& message)
 {
+    if(!source_matches(message.sysid,message.compid)){
+        return;
+    }
     mavlink_param_value_t param_value;
     mavlink_msg_param_value_decode(&message, &param_value);
     const std::string safe_param_id = MavlinkParameterSet::extract_safe_param_id(param_value.param_id);
@@ -664,11 +667,11 @@ void MavlinkParameterSender::process_param_value(const mavlink_message_t& messag
 
 void MavlinkParameterSender::process_param_ext_value(const mavlink_message_t& message)
 {
-    mavlink_param_ext_value_t param_ext_value{};
-    mavlink_msg_param_ext_value_decode(&message, &param_ext_value);
     if(!source_matches(message.sysid,message.compid)){
         return;
     }
+    mavlink_param_ext_value_t param_ext_value{};
+    mavlink_msg_param_ext_value_decode(&message, &param_ext_value);
     const auto safe_param_id=MavlinkParameterSet::extract_safe_param_id(param_ext_value.param_id);
     if(safe_param_id.empty()){
         LogDebug()<<"Got ill-formed param_ext_value message (param_id empty)";
@@ -720,8 +723,10 @@ void MavlinkParameterSender::process_param_ext_value(const mavlink_message_t& me
 
 void MavlinkParameterSender::process_param_ext_ack(const mavlink_message_t& message)
 {
+    if(!source_matches(message.sysid,message.compid)){
+        return;
+    }
     // LogDebug() << "getting param ext ack";
-
     mavlink_param_ext_ack_t param_ext_ack;
     mavlink_msg_param_ext_ack_decode(&message, &param_ext_ack);
     const auto safe_param_id=MavlinkParameterSet::extract_safe_param_id(param_ext_ack.param_id);
