@@ -970,14 +970,15 @@ void MavlinkParameterSender::check_all_params_timeout() {
                 assert(_param_set_from_server.is_complete());
                 _all_params_callback(GetAllParamsResult::Success,_param_set_from_server.get_all_params());
                 _all_params_callback= nullptr;
+            }else{
+                // We request all the missing parameters. for that, we can use the work queue.
+                // We add the first missing parameter to the work queue, once we've gotten a result of this operation we can fetch the next one.
+                const auto first_missing_param=missing_param_indices.at(0);
+                LogDebug()<<"Requesting missing parameter "<<(int)first_missing_param;
+                auto new_work = std::make_shared<WorkItem>(_timeout_s_callback(),
+                                                           WorkItemGet{static_cast<int16_t>(first_missing_param),create_recursive_callback()}, this);
+                _work_queue.push_back(new_work);
             }
-            // We request all the missing parameters. for that, we can use the work queue.
-            // We add the first missing parameter to the work queue, once we've gotten a result of this operation we can fetch the next one.
-            const auto first_missing_param=missing_param_indices.at(0);
-            LogDebug()<<"Requesting missing parameter "<<(int)first_missing_param;
-            auto new_work = std::make_shared<WorkItem>(_timeout_s_callback(),
-                                                       WorkItemGet{static_cast<int16_t>(first_missing_param),create_recursive_callback()}, this);
-            _work_queue.push_back(new_work);
         }
     }
 }
