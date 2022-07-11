@@ -266,6 +266,8 @@ private:
 
     // Validate if the response matches what was given in the work queue
     static bool validate_id_or_index(const std::variant<std::string,int16_t>& original,const std::string& param_id,int16_t param_index);
+    // we only process messages that come from the instance we talk to
+    bool source_matches(uint8_t source_sys_id,uint8_t source_comp_id);
 
     // This adds the given parameter to the parameter set cache (if possible) and then checks and call the
     // _all_params_callback() if it is set and the parameter set has become complete after adding this parameter.

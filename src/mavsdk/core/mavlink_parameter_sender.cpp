@@ -666,6 +666,9 @@ void MavlinkParameterSender::process_param_ext_value(const mavlink_message_t& me
 {
     mavlink_param_ext_value_t param_ext_value{};
     mavlink_msg_param_ext_value_decode(&message, &param_ext_value);
+    if(!source_matches(message.sysid,message.compid)){
+        return;
+    }
     const auto safe_param_id=MavlinkParameterSet::extract_safe_param_id(param_ext_value.param_id);
     if(safe_param_id.empty()){
         LogDebug()<<"Got ill-formed param_ext_value message (param_id empty)";
@@ -1017,5 +1020,13 @@ MavlinkParameterSender::GetParamAnyCallback MavlinkParameterSender::create_recur
     return callback;
 }
 
+bool MavlinkParameterSender::source_matches(uint8_t source_sys_id,uint8_t source_comp_id){
+    const bool matches=source_sys_id==_sender.get_system_id() && source_comp_id== _target_component_id;
+    if(!matches){
+        LogDebug()<<"Skipping message coming from {"<<(int)source_sys_id<<":"<<(int)source_comp_id<<"} "
+                   <<" since we talk to {"<<_sender.get_system_id()<<":"<<_target_component_id<<"}";
+    }
+    return matches;
+}
 
 } // namespace mavsdk
