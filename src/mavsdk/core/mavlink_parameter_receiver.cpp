@@ -152,7 +152,7 @@ MavlinkParameterReceiver::retrieve_server_param_int(const std::string& name)
 }
 
 
-void MavlinkParameterReceiver::process_param_set_internally(const std::string& param_id,const ParamValue& value_to_set,bool extended)
+void MavlinkParameterReceiver::internal_process_param_set(const std::string& param_id,const ParamValue& value_to_set,bool extended)
 {
     LogDebug() << "Param set request "<<(extended ? "Ext" : "")<<": " << param_id << " with "<<value_to_set;
     std::lock_guard<std::mutex> lock(_all_params_mutex);
@@ -231,7 +231,7 @@ void MavlinkParameterReceiver::process_param_set(const mavlink_message_t& messag
         LogWarn() << "Invalid Param Set Request: " << safe_param_id;
         return;
     }
-    process_param_set_internally(safe_param_id,value_to_set, false);
+    internal_process_param_set(safe_param_id,value_to_set, false);
 }
 
 void MavlinkParameterReceiver::process_param_ext_set(const mavlink_message_t& message)
@@ -253,7 +253,7 @@ void MavlinkParameterReceiver::process_param_ext_set(const mavlink_message_t& me
         LogWarn() << "Invalid Param Set ext Request: " << safe_param_id;
         return;
     }
-    process_param_set_internally(safe_param_id,value_to_set, true);
+    internal_process_param_set(safe_param_id,value_to_set, true);
 }
 
 void MavlinkParameterReceiver::process_param_request_read(const mavlink_message_t& message)

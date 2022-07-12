@@ -113,7 +113,9 @@ private:
      * @param extended true if the message is coming from the extended protocol,false otherwise. The response workflow
      * is slightly different on the extended protocol.
      */
-    void process_param_set_internally(const std::string& param_id,const ParamValue& value_to_set,bool extended);
+    void internal_process_param_set(const std::string& param_id,const ParamValue& value_to_set,bool extended);
+    // convert the information from the received mavlink message into a c++ representation (dropping ill-formed messages),
+    // then call the internal method if message is valid. Does not check if the param_id is known to this server.
     void process_param_set(const mavlink_message_t& message);
     void process_param_ext_set(const mavlink_message_t& message);
 
