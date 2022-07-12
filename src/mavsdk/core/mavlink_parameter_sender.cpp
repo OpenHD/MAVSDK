@@ -656,7 +656,7 @@ void MavlinkParameterSender::process_param_value(const mavlink_message_t& messag
             work_queue_guard->pop_front();
             work_queue_guard.reset();
             if (specific.callback) {
-                specific.callback(MavlinkParameterSender::Result::Success);
+                specific.callback(result);
             }
         } break;
         default:
