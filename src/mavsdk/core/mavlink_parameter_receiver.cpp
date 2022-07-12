@@ -223,13 +223,13 @@ void MavlinkParameterReceiver::process_param_set(const mavlink_message_t& messag
     const std::string safe_param_id = MavlinkParameterSet::extract_safe_param_id(set_request.param_id);
     if(!MavlinkParameterSet::is_valid_param_id(safe_param_id)){
         // set messages always use the param id as unique identifier
-        LogWarn() << "Invalid Param Set ID Request {"<<safe_param_id<<"}";
+        LogWarn() << "Invalid Param Set param_id {"<<safe_param_id<<"}";
         return;
     }
     ParamValue value_to_set;
     if (!value_to_set.set_from_mavlink_param_set_bytewise(set_request)) {
         // This should never happen, the type enum in the message is unknown.
-        LogWarn() << "Invalid Param Set Request: " << safe_param_id;
+        LogWarn() << "Invalid Param Set value for: " << safe_param_id;
         return;
     }
     internal_process_param_set(safe_param_id,value_to_set, false);
@@ -246,13 +246,13 @@ void MavlinkParameterReceiver::process_param_ext_set(const mavlink_message_t& me
     const std::string safe_param_id = MavlinkParameterSet::extract_safe_param_id(set_request.param_id);
     if(!MavlinkParameterSet::is_valid_param_id(safe_param_id)){
         // set messages always use the param id as unique identifier
-        LogWarn() << "Invalid Param Set ID Request {"<<safe_param_id<<"}";
+        LogWarn() << "Invalid Param Set ext param_id: {"<<safe_param_id<<"}";
         return;
     }
     ParamValue value_to_set;
     if (!value_to_set.set_from_mavlink_param_ext_set(set_request)) {
         // This should never happen, the type enum in the message is unknown.
-        LogWarn() << "Invalid Param Set ext Request: " << safe_param_id;
+        LogWarn() << "Invalid Param Set ext value for: " << safe_param_id;
         return;
     }
     internal_process_param_set(safe_param_id,value_to_set, true);
@@ -427,7 +427,7 @@ std::ostream& operator<<(std::ostream& str, const MavlinkParameterReceiver::Resu
     }
 }
 
-bool MavlinkParameterReceiver::target_matches(const uint16_t target_sys_id,const uint16_t target_comp_id,bool is_request)
+bool MavlinkParameterReceiver::target_matches(const uint16_t target_sys_id,const uint16_t target_comp_id,bool is_request)const
 {
     if(target_sys_id!=_sender.get_own_system_id()){
         return false;
@@ -438,7 +438,7 @@ bool MavlinkParameterReceiver::target_matches(const uint16_t target_sys_id,const
     return target_comp_id==_sender.get_own_component_id();
 }
 
-void MavlinkParameterReceiver::log_target_mismatch(uint16_t target_sys_id,uint16_t target_comp_id) {
+void MavlinkParameterReceiver::log_target_mismatch(uint16_t target_sys_id,uint16_t target_comp_id)const {
     LogDebug()<<"Ignoring message - wrong target id. Got:"<<(int)target_sys_id<<":"<<(int)target_comp_id<<" Wanted:"
         <<(int)_sender.get_own_system_id()<<":"<<(int)_sender.get_own_component_id();
 }

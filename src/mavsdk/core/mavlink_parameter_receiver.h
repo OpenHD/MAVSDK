@@ -171,8 +171,8 @@ private:
      * @param target_comp_id the target component id from the mavlink param message
      * @param is_request we also respond to MAV_COMP_ID_ALL on messages that are a "request", but not on the "set" messages.
      */
-    bool target_matches(uint16_t target_sys_id,uint16_t target_comp_id,bool is_request);
-    void log_target_mismatch(uint16_t target_sys_id,uint16_t target_comp_id);
+    [[nodiscard]] bool target_matches(uint16_t target_sys_id,uint16_t target_comp_id,bool is_request)const;
+    void log_target_mismatch(uint16_t target_sys_id,uint16_t target_comp_id)const;
 
     // Helper for safely handling a request_read or ext_request_read message (which have the exact same layout).
     // returns the identifier that should be used or nothing if the message is ill-formed. See

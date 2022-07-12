@@ -1025,7 +1025,7 @@ MavlinkParameterSender::GetParamAnyCallback MavlinkParameterSender::create_recur
     return callback;
 }
 
-bool MavlinkParameterSender::source_matches(uint8_t source_sys_id,uint8_t source_comp_id){
+bool MavlinkParameterSender::source_matches(uint8_t source_sys_id,uint8_t source_comp_id)const{
     const bool matches=source_sys_id==_sender.get_system_id() && source_comp_id== _target_component_id;
     if(!matches){
         LogDebug()<<"Skipping message coming from {"<<(int)source_sys_id<<":"<<(int)source_comp_id<<"} "
