@@ -221,7 +221,7 @@ void MavlinkParameterReceiver::process_param_set(const mavlink_message_t& messag
         return;
     }
     const std::string safe_param_id = MavlinkParameterSet::extract_safe_param_id(set_request.param_id);
-    if(!MavlinkParameterSet::validate_param_id(safe_param_id)){
+    if(!MavlinkParameterSet::is_valid_param_id(safe_param_id)){
         // set messages always use the param id as unique identifier
         LogWarn() << "Invalid Param Set ID Request {"<<safe_param_id<<"}";
         return;
@@ -244,7 +244,7 @@ void MavlinkParameterReceiver::process_param_ext_set(const mavlink_message_t& me
         return;
     }
     const std::string safe_param_id = MavlinkParameterSet::extract_safe_param_id(set_request.param_id);
-    if(!MavlinkParameterSet::validate_param_id(safe_param_id)){
+    if(!MavlinkParameterSet::is_valid_param_id(safe_param_id)){
         // set messages always use the param id as unique identifier
         LogWarn() << "Invalid Param Set ID Request {"<<safe_param_id<<"}";
         return;
@@ -450,7 +450,7 @@ MavlinkParameterReceiver::extract_request_read_param_identifier(
     if(param_index==-1){
         // use param_id if index == -1
         const auto safe_param_id = MavlinkParameterSet::extract_safe_param_id(param_id);
-        if(MavlinkParameterSet::validate_param_id(safe_param_id)){
+        if(MavlinkParameterSet::is_valid_param_id(safe_param_id)){
             return safe_param_id;
         }
         LogWarn()<<"Message with param_index=-1 but no valid param id";

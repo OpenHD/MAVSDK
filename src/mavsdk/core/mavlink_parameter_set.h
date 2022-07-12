@@ -74,8 +74,9 @@ public:
     // create a buffer that is long enough for the message pack to read from. Discards the null terminator
     // if the param_id is exactly PARAM_ID_LEN long.
     static std::array<char,PARAM_ID_LEN> param_id_to_message_buffer(const std::string& param_id);
-    // returns true if the given param id is a valid param id for the mavlink protocol
-    static bool validate_param_id(const std::string& param_id);
+    // returns true if the given param id is a valid param id for the mavlink protocol.
+    // It must not be empty and smaller than 16 chars in total.
+    static bool is_valid_param_id(const std::string& param_id);
 private:
     struct InternalParameter{
         // unique parameter id

@@ -7,7 +7,7 @@ namespace mavsdk{
 bool MavlinkParameterSet::add_new_parameter(const std::string& param_id, ParamValue value)
 {
     std::lock_guard<std::mutex> lock(_all_params_mutex);
-    if(!validate_param_id(param_id)){
+    if(!is_valid_param_id(param_id)){
         if(enable_debugging){
             LogDebug()<<"Invalid param_id:{"<<param_id<<"}";
         }
@@ -180,7 +180,7 @@ MavlinkParameterSet::param_id_to_message_buffer(const std::string& param_id)
     std::memcpy(ret.data(), param_id.c_str(),param_id.length());
     return ret;
 }
-bool MavlinkParameterSet::validate_param_id(const std::string& param_id)
+bool MavlinkParameterSet::is_valid_param_id(const std::string& param_id)
 {
     if(param_id.empty()){
         return false;
@@ -209,7 +209,7 @@ bool ParamSetFromServer::add_new_parameter(
     const uint16_t parameter_count,
     const ParamValue& value)
 {
-    assert(MavlinkParameterSet::validate_param_id(safe_param_id));
+    assert(MavlinkParameterSet::is_valid_param_id(safe_param_id));
     if(param_index>=parameter_count){
         LogWarn() << "Inconsistent data from server. param_index:"<<(int)param_index<<" param_count:"<<(int)parameter_count;
         return false;
