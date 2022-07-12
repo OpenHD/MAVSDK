@@ -245,6 +245,7 @@ void MavlinkParameterReceiver::process_param_ext_set(const mavlink_message_t& me
     }
     const std::string safe_param_id = MavlinkParameterSet::extract_safe_param_id(set_request.param_id);
     if(!MavlinkParameterSet::validate_param_id(safe_param_id)){
+        // set messages always use the param id as unique identifier
         LogWarn() << "Invalid Param Set ID Request {"<<safe_param_id<<"}";
         return;
     }
