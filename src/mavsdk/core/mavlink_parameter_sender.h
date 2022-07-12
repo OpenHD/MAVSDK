@@ -264,7 +264,8 @@ private:
 
     bool _parameter_debugging=true;
 
-    // Validate if the response matches what was given in the work queue
+    // Validate if the response matches what was given in the work queue - aka
+    // if original==std::string, check against the provided param id. Otherwise, check agains the provided param_index
     static bool validate_id_or_index(const std::variant<std::string,int16_t>& original,const std::string& param_id,int16_t param_index);
     // we only process messages that come from the instance we talk to
     [[nodiscard]] bool source_matches(uint8_t source_sys_id,uint8_t source_comp_id)const;
