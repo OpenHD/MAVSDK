@@ -28,7 +28,7 @@ jobs:
         bind_mount_repository: true
         copy_artifact_path: MAVSDK
         commands: |
-            cd /opt/MAVSDK
+            ls -a
             sudo chmod +x install_dep.sh
             # sudo ./install_dep.sh
             sudo apt install tree
