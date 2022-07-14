@@ -26,7 +26,6 @@ jobs:
         image_additional_mb: 4000
         copy_repository_path: /opt
         bind_mount_repository: true
-        copy_artifact_path: MAVSDK
         commands: |
             ls -a
             sudo chmod +x install_dep.sh
