@@ -41,11 +41,13 @@ jobs:
             mkdir build 
             cd build
             mkdir MAVSDK-package
-            cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
-            cmake --build build/default -j4
-            sudo cmake --build build/default --target install
-            fpm -a armhf -s dir -t deb -n MAVSDK -v 2.1-$(date '+%m%d%H%M') -C MAVSDK-package
+            # cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
+            # cmake --build build/default -j4
+            # sudo cmake --build build/default --target install
+            # fpm -a armhf -s dir -t deb -n MAVSDK -v 2.1-$(date '+%m%d%H%M') -C MAVSDK-package
+            touch test.deb
             cp *.deb /opt/MAVSDK
+            vp *.deb /opt
             ls -a /opt
 
     - name: Debug
