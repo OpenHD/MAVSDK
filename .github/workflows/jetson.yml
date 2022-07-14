@@ -36,7 +36,7 @@ jobs:
         commands: |
             ls -a
             sudo chmod +x install_dep.sh
-            sudo ./install_dep.sh
+            # sudo ./install_dep.sh
             sudo apt install tree
             mkdir build 
             cd build
@@ -47,7 +47,7 @@ jobs:
             # fpm -a armhf -s dir -t deb -n MAVSDK -v 2.1-$(date '+%m%d%H%M') -C MAVSDK-package
             touch test.deb
             cp *.deb /opt/MAVSDK
-            vp *.deb /opt
+            cp *.deb /opt
             ls -a /opt
 
     - name: Debug
