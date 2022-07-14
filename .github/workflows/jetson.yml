@@ -41,17 +41,17 @@ jobs:
             touch test.deb
             cp *.deb /opt/MAVSDK
             cp *.deb /opt
-            ls -a /opt
+            ls -a /opt/MAVSDK
 
     - name: Debug
-      run: ls -a && tree  
+      run: ls -a && pwd
 
     - name: Upload to Github
       uses: 'actions/upload-artifact@v2'
       with:
         name: "MAVSDK"
         path: |
-          /opt/MAVSDK/*.deb
+          MAVSDK/*.deb
           *.log
 
     - name: Push
