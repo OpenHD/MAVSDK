@@ -24,6 +24,8 @@ jobs:
         bootpartition:
         rootpartition: 1
         image_additional_mb: 4000
+        copy_repository_path: /opt
+        copy_artifact_path: MAVSDK
         commands: |
             ls -a
             sudo chmod +x install_dep.sh
