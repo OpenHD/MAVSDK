@@ -45,8 +45,8 @@ jobs:
             cmake --build build/default -j4
             sudo cmake --build build/default --target install
             fpm -a armhf -s dir -t deb -n MAVSDK -v 2.1-$(date '+%m%d%H%M') -C MAVSDK-package
-            cp *.deb /opt/
-            ls -a
+            cp *.deb /opt/MAVSDK
+            ls -a /opt
 
     - name: Debug
       run: ls -a && tree  
