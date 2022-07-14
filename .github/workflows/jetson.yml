@@ -24,6 +24,7 @@ jobs:
         bootpartition:
         rootpartition: 1
         image_additional_mb: 4000
+        copy_repository_path: /opt
         bind_mount_repository: true
         commands: |
             ls -a
@@ -37,8 +38,8 @@ jobs:
             cmake --build build/default -j4
             sudo cmake --build build/default --target install
             fpm -a armhf -s dir -t deb -n MAVSDK -v 2.1-$(date '+%m%d%H%M') -C MAVSDK-package
-            cp *.deb MAVSDK
-            cp *.deb ../MAVSDK
+            cp *.deb /opt/MAVSDK
+            cp *.deb /opt
             ls -a /opt/MAVSDK
 
     - name: Debug
