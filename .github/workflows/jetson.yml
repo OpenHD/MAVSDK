@@ -27,8 +27,8 @@ jobs:
         copy_repository_path: /opt
         copy_artifact_path: MAVSDK
         commands: |
-            ls -a
-            sudo chmod +x install_dep.sh
+            cd /opt/MAVSDK
+            #sudo chmod +x install_dep.sh
             # sudo ./install_dep.sh
             sudo apt install tree
             mkdir build 
