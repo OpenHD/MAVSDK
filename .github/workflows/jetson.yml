@@ -29,16 +29,15 @@ jobs:
         commands: |
             ls -a
             sudo chmod +x install_dep.sh
-            # sudo ./install_dep.sh
+            sudo ./install_dep.sh
             sudo apt install tree
             mkdir build 
             cd build
             mkdir MAVSDK-package
-            # cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
-            # cmake --build build/default -j4
-            # sudo cmake --build build/default --target install
-            # fpm -a armhf -s dir -t deb -n MAVSDK -v 2.1-$(date '+%m%d%H%M') -C MAVSDK-package
-            touch test.deb
+            cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
+            cmake --build build/default -j4
+            sudo cmake --build build/default --target install
+            fpm -a armhf -s dir -t deb -n MAVSDK -v 2.1-$(date '+%m%d%H%M') -C MAVSDK-package
             cp *.deb /opt/MAVSDK
             cp *.deb /opt
             ls -a /opt/MAVSDK
@@ -51,7 +50,7 @@ jobs:
       with:
         name: "MAVSDK"
         path: |
-          MAVSDK/*.deb
+          *.deb
           *.log
 
     - name: Push
