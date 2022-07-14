@@ -28,7 +28,7 @@ jobs:
         copy_artifact_path: MAVSDK
         commands: |
             cd /opt/MAVSDK
-            #sudo chmod +x install_dep.sh
+            sudo chmod +x install_dep.sh
             # sudo ./install_dep.sh
             sudo apt install tree
             mkdir build 
@@ -51,7 +51,7 @@ jobs:
       with:
         name: "MAVSDK"
         path: |
-          *.deb
+          /opt/MAVSDK/*.deb
           *.log
 
     - name: Push
