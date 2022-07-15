@@ -30,6 +30,7 @@ jobs:
             ls -a
             sudo chmod +x install_dep.sh
             sudo ./install_dep.sh
+            VER2=$(git rev-parse --short HEAD)
             sudo apt install tree
             mkdir build 
             cd build
@@ -37,7 +38,8 @@ jobs:
             cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
             cmake --build build/default -j4
             sudo cmake --build build/default --target install
-            fpm -a armhf -s dir -t deb -n MAVSDK -v 2.1-$(date '+%m%d%H%M') -C MAVSDK-package
+            VERSION="2.2.0-dev$(date '+%m%d%H%M')-${VER2}"
+            fpm -a armhf -s dir -t deb -n MAVSDK -v ${VERSION} -C MAVSDK-package
             cp *.deb /opt/MAVSDK
             cp *.deb /opt
             ls -a /opt/MAVSDK
