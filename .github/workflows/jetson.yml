@@ -39,7 +39,7 @@ jobs:
             cmake --build build/default -j4
             sudo cmake --build build/default --target install
             VERSION="2.2.0-dev$(date '+%m%d%H%M')-${VER2}"
-            fpm -a armhf -s dir -t deb -n MAVSDK -v ${VERSION} -C MAVSDK-package
+            fpm -a arm64 -s dir -t deb -n MAVSDK -v ${VERSION} -C MAVSDK-package
             cp *.deb /opt/MAVSDK
             cp *.deb /opt
             ls -a /opt/MAVSDK
