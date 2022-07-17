@@ -42,7 +42,7 @@ jobs:
             cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
             cmake --build build/default -j4
             sudo cmake --build build/default --target install
-            fpm -a armhf -s dir -t deb -n MAVSDK -v 2.2-evo-$(date '+%m%d%H%M') -C MAVSDK-package
+            fpm -a armhf -s dir -t deb -n MAVSDK -v 2.2.0-evo-$(date '+%m%d%H%M') -C MAVSDK-package
             cp *.deb /opt/
             ls -a
 
