@@ -124,12 +124,6 @@ public:
 
     bool is_armed() const { return _armed; }
 
-    MavlinkParameterSender::Result set_param(
-        const std::string& name,
-        ParamValue value,
-        std::optional<uint8_t> maybe_component_id = {},
-        bool extended = false);
-
     MavlinkParameterSender::Result set_param_float(
         const std::string& name,
         float value,
@@ -144,18 +138,7 @@ public:
 
     std::map<std::string, ParamValue> get_all_params();
 
-    MavlinkParameterSender::Result
-    set_param_custom(const std::string& name, const std::string& value);
-
     using SetParamCallback = std::function<void(MavlinkParameterSender::Result result)>;
-
-    void set_param_float_async(
-        const std::string& name,
-        float value,
-        const SetParamCallback& callback,
-        const void* cookie,
-        std::optional<uint8_t> maybe_component_id = {},
-        bool extended = false);
 
     void set_param_int_async(
         const std::string& name,
@@ -187,8 +170,6 @@ public:
 
     std::pair<MavlinkParameterSender::Result, float> get_param_float(const std::string& name);
     std::pair<MavlinkParameterSender::Result, int> get_param_int(const std::string& name);
-    std::pair<MavlinkParameterSender::Result, std::string>
-    get_param_custom(const std::string& name);
 
     // These methods can be used to cache a parameter when a system connects. For that
     // the callback can just be set to nullptr.
@@ -213,8 +194,6 @@ public:
         const void* cookie,
         std::optional<uint8_t> maybe_component_id = {},
         bool extended = false);
-    void get_param_custom_async(
-        const std::string& name, const GetParamCustomCallback& callback, const void* cookie);
 
     void set_param_async(
         const std::string& name,
@@ -232,11 +211,6 @@ public:
     void subscribe_param_int(
         const std::string& name,
         const MavlinkParameterSender::ParamIntChangedCallback& callback,
-        const void* cookie);
-
-    void subscribe_param_custom(
-        const std::string& name,
-        const MavlinkParameterSender::ParamCustomChangedCallback& callback,
         const void* cookie);
 
     void cancel_all_param(const void* cookie);
@@ -279,6 +253,8 @@ public:
 
     double timeout_s() const;
 
+    std::shared_ptr<MavlinkParameterSender> get_param_sender(bool use_extended,uint8_t target_comp_id);
+
 private:
     static bool is_autopilot(uint8_t comp_id);
     static bool is_camera(uint8_t comp_id);
@@ -313,15 +289,6 @@ private:
 
     MavlinkCommandSender::CommandLong
     make_command_msg_rate(uint16_t message_id, double rate_hz, uint8_t component_id);
-
-    static void receive_float_param(
-        MavlinkParameterSender::Result result,
-        ParamValue value,
-        const GetParamFloatCallback& callback);
-    static void receive_int_param(
-        MavlinkParameterSender::Result result,
-        ParamValue value,
-        const GetParamIntCallback& callback);
 
     std::mutex _component_discovered_callback_mutex{};
     System::DiscoverCallback _component_discovered_callback{nullptr};
@@ -363,6 +330,10 @@ private:
     static constexpr double _ping_interval_s = 5.0;
 
     MavlinkParameterSender _mavlink_parameter_sender;
+    // COnsti10 hacky
+    std::mutex _param_senders_mutex;
+    std::map<std::string,std::shared_ptr<MavlinkParameterSender>> _param_senders;
+
     MavlinkCommandSender _command_sender;
 
     Timesync _timesync;
