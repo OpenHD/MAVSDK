@@ -48,12 +48,12 @@ MavlinkParameterSender::MavlinkParameterSender(
     //}
 }
 
-void MavlinkParameterSender::late_init(uint8_t target_component_id, bool use_extended) {
+/*void MavlinkParameterSender::late_init(uint8_t target_component_id, bool use_extended) {
     _target_component_id=target_component_id;
     _use_extended=use_extended;
     // if the target comp id or the usage of extended / non-extended changes, we need to clear the cache
     _param_set_from_server.clear();
-}
+}*/
 
 MavlinkParameterSender::~MavlinkParameterSender()
 {

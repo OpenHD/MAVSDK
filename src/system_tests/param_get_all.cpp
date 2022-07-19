@@ -76,7 +76,8 @@ TEST(SystemTest, ParamGetAll)
 
     ASSERT_TRUE(system->has_autopilot());
 
-    auto param_sender = Param{system};
+    auto param_sender_non_ext = Param{system,false,1};
+    auto param_sender_ext = Param{system,true,1};
 
     // we emulate a packet loss of every second packet - this obviously doesn't really emulate true packet loss, but will at least
     // test the packet loss resilience a bit. Since the param sender re-transmits up to 2 times, when dropping every second packet
@@ -121,15 +122,13 @@ TEST(SystemTest, ParamGetAll)
 
     {
         // Here we use the non-extended protocol
-        param_sender.late_init(1, false);
-        const auto all_params = param_sender.get_all_params();
+        const auto all_params = param_sender_non_ext.get_all_params();
         assert_equal<int,Param::IntParam>(test_int_params,all_params.int_params);
         assert_equal<float,Param::FloatParam>(test_float_params,all_params.float_params);
     }
     {
         // now we do the same, but this time with the extended protocol
-        param_sender.late_init(1, true);
-        const auto all_params = param_sender.get_all_params();
+        const auto all_params = param_sender_ext.get_all_params();
         assert_equal<int,Param::IntParam>(test_int_params,all_params.int_params);
         assert_equal<float,Param::FloatParam>(test_float_params,all_params.float_params);
         assert_equal<std::string,Param::CustomParam>(test_string_params,all_params.custom_params);

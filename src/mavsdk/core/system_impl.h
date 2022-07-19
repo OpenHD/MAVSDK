@@ -148,8 +148,6 @@ public:
         std::optional<uint8_t> maybe_component_id = {},
         bool extended = false);
 
-    void late_init(uint8_t target_component_id, bool use_extended);
-
     FlightMode get_flight_mode() const;
 
     MavlinkCommandSender::Result
@@ -254,8 +252,10 @@ public:
     double timeout_s() const;
 
     std::shared_ptr<MavlinkParameterSender> get_param_sender(bool use_extended,uint8_t target_comp_id);
-
 private:
+    //XXX begin
+    std::shared_ptr<MavlinkParameterSender> get_param_senderX(std::optional<uint8_t> maybe_component_id,bool extended);
+    //XXX end
     static bool is_autopilot(uint8_t comp_id);
     static bool is_camera(uint8_t comp_id);
 
@@ -329,7 +329,6 @@ private:
 
     static constexpr double _ping_interval_s = 5.0;
 
-    MavlinkParameterSender _mavlink_parameter_sender;
     // COnsti10 hacky
     std::mutex _param_senders_mutex;
     std::map<std::string,std::shared_ptr<MavlinkParameterSender>> _param_senders;

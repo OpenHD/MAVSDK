@@ -34,8 +34,6 @@ public:
 
     Param::AllParams get_all_params();
 
-    void late_init(uint8_t target_component_id,bool use_extended);
-
 private:
     const bool _use_extended;
     const uint8_t _target_component_id;

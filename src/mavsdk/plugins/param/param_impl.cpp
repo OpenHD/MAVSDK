@@ -114,11 +114,6 @@ Param::AllParams ParamImpl::get_all_params()
     return res;
 }
 
-void ParamImpl::late_init(uint8_t target_component_id, bool use_extended) {
-    auto param_server=_parent->get_param_sender(_use_extended,_target_component_id);
-    param_server->late_init(target_component_id,use_extended);
-}
-
 Param::Result
 ParamImpl::result_from_mavlink_parameter_sender_result(MavlinkParameterSender::Result result)
 {

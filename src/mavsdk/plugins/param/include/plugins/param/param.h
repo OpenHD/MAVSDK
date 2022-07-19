@@ -249,8 +249,6 @@ public:
      */
     Param::AllParams get_all_params() const;
 
-    void late_init(uint8_t target_component_id,bool use_extended);
-
     /**
      * @brief Copy constructor.
      */
