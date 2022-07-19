@@ -263,6 +263,7 @@ private:
     ParamSetFromServer _param_set_from_server;
 
     bool _parameter_debugging=true;
+    bool mismatch_debugging=false; // These are not errors, but can be helpfull for debugging
 
     // Validate if the response matches what was given in the work queue - aka
     // if original==std::string, check against the provided param id. Otherwise, check against the provided param_index
