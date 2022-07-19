@@ -36,7 +36,7 @@ public:
      *
      * @param system The specific system associated with this plugin.
      */
-    explicit Param(System& system); // deprecated
+    explicit Param(System& system,uint8_t target_component_id=1); // deprecated
 
     /**
      * @brief Constructor. Creates the plugin for a specific System.
@@ -49,7 +49,7 @@ public:
      *
      * @param system The specific system associated with this plugin.
      */
-    explicit Param(std::shared_ptr<System> system); // new
+    explicit Param(std::shared_ptr<System> system,uint8_t target_component_id=1); // new
 
     /**
      * @brief Destructor (internal use only).

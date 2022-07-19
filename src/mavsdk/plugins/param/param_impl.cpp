@@ -4,12 +4,14 @@
 
 namespace mavsdk {
 
-ParamImpl::ParamImpl(System& system) : PluginImplBase(system)
+ParamImpl::ParamImpl(System& system,uint8_t target_component_id) : PluginImplBase(system),
+    _target_component_id(target_component_id)
 {
     _parent->register_plugin(this);
 }
 
-ParamImpl::ParamImpl(std::shared_ptr<System> system) : PluginImplBase(std::move(system))
+ParamImpl::ParamImpl(std::shared_ptr<System> system,uint8_t target_component_id) : PluginImplBase(std::move(system)),
+    _target_component_id(target_component_id)
 {
     _parent->register_plugin(this);
 }
