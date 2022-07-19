@@ -32,7 +32,7 @@ public:
 
     Param::Result set_param_custom(const std::string& name, const std::string& value);
 
-    Param::AllParams get_all_params();
+    Param::AllParams get_all_params(bool clear_cache);
 
 private:
     const uint8_t _target_component_id;

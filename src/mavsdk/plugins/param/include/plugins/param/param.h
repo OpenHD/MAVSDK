@@ -247,7 +247,7 @@ public:
      *
      * @return Result of request.
      */
-    Param::AllParams get_all_params() const;
+    Param::AllParams get_all_params(bool clear_cache=false) const;
 
     /**
      * @brief Copy constructor.

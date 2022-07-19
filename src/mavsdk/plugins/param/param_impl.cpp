@@ -76,10 +76,10 @@ Param::Result ParamImpl::set_param_custom(const std::string& name, const std::st
     return result_from_mavlink_parameter_sender_result(result);
 }
 
-Param::AllParams ParamImpl::get_all_params()
+Param::AllParams ParamImpl::get_all_params(bool clear_cache)
 {
     auto param_server=_parent->get_param_sender(_target_component_id,_use_extended);
-    auto tmp = param_server->get_all_params();
+    auto tmp = param_server->get_all_params(clear_cache);
 
     Param::AllParams res{};
     for (auto const& param_pair : tmp) {
