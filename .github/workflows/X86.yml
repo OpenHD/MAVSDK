@@ -54,7 +54,6 @@ jobs:
         repo: "openhd-2-2-evo"
         distro: "ubuntu"
         release: "focal"
-        republish: "true" # needed ONLY if version is not changing
         file: "*.deb"
           
           
