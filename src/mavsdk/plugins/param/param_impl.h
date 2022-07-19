@@ -10,8 +10,8 @@ namespace mavsdk {
 
 class ParamImpl : public PluginImplBase {
 public:
-    explicit ParamImpl(System& system,uint8_t target_component_id);
-    explicit ParamImpl(std::shared_ptr<System> system,uint8_t target_component_id);
+    explicit ParamImpl(System& system,bool use_extended,uint8_t target_component_id);
+    explicit ParamImpl(std::shared_ptr<System> system,bool use_extended,uint8_t target_component_id);
     ~ParamImpl() override;
 
     void init() override;
@@ -37,6 +37,7 @@ public:
     void late_init(uint8_t target_component_id,bool use_extended);
 
 private:
+    const bool _use_extended;
     const uint8_t _target_component_id;
     static Param::Result
     result_from_mavlink_parameter_sender_result(MavlinkParameterSender::Result result);

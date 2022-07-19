@@ -14,11 +14,13 @@ using FloatParam = Param::FloatParam;
 using CustomParam = Param::CustomParam;
 using AllParams = Param::AllParams;
 
-Param::Param(System& system,uint8_t target_component_id) : PluginBase(), _impl{std::make_unique<ParamImpl>(system,target_component_id)} {}
-
-Param::Param(std::shared_ptr<System> system,uint8_t target_component_id) :
+Param::Param(System& system,bool use_extended,uint8_t target_component_id) :
     PluginBase(),
-    _impl{std::make_unique<ParamImpl>(system,target_component_id)}
+    _impl{std::make_unique<ParamImpl>(system,use_extended,target_component_id)} {}
+
+Param::Param(std::shared_ptr<System> system,bool use_extended,uint8_t target_component_id) :
+    PluginBase(),
+    _impl{std::make_unique<ParamImpl>(system,use_extended,target_component_id)}
 {}
 
 Param::~Param() {}
