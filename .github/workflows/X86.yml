@@ -30,7 +30,9 @@ jobs:
         sudo cmake --build build/default --target install
         VERSION="2.2.0-evo-$(date '+%m%d%H%M')-${VER2}"
         fpm -a x86_64 -s dir -t deb -n MAVSDK -v ${VERSION} -C MAVSDK-package
-        cp *.deb /opt/
+        cp *.deb ../
+        cd ../
+        cp *.deb ../
         ls -a
 
     - name: Upload to Github
