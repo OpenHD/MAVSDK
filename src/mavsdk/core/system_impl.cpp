@@ -1154,11 +1154,11 @@ void SystemImpl::subscribe_param_int(
     tmp->subscribe_param_int_changed(name, callback, cookie);
 }
 
-std::shared_ptr<MavlinkParameterSender> SystemImpl::get_param_sender(bool use_extended,uint8_t target_comp_id)
+std::shared_ptr<MavlinkParameterSender> SystemImpl::get_param_sender(uint8_t target_comp_id,bool use_extended)
 {
     std::lock_guard<std::mutex> lock(_param_senders_mutex);
     std::stringstream ss;
-    ss<<(use_extended ? "Y" : "N")<<"_"<<static_cast<int>(target_comp_id);
+    ss<<static_cast<int>(target_comp_id)<<"_"<<(use_extended ? "Y" : "N");
     const std::string key=ss.str();
     if(_param_senders.find(key)==_param_senders.end()){
         // Does not exist yet

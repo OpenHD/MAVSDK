@@ -47,7 +47,7 @@ TEST(SystemTest, ParamCustomSetAndGet)
 
     ASSERT_TRUE(system->has_autopilot());
 
-    auto param = Param{system,true,1};
+    auto param = Param{system,1,true};
 
     const auto data = generate_uppercase_ascii(128);
 

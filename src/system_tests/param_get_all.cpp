@@ -76,8 +76,8 @@ TEST(SystemTest, ParamGetAll)
 
     ASSERT_TRUE(system->has_autopilot());
 
-    auto param_sender_non_ext = Param{system,false,1};
-    auto param_sender_ext = Param{system,true,1};
+    auto param_sender_non_ext = Param{system,1,false};
+    auto param_sender_ext = Param{system,1,true};
 
     // we emulate a packet loss of every second packet - this obviously doesn't really emulate true packet loss, but will at least
     // test the packet loss resilience a bit. Since the param sender re-transmits up to 2 times, when dropping every second packet

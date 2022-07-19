@@ -251,7 +251,7 @@ public:
 
     double timeout_s() const;
 
-    std::shared_ptr<MavlinkParameterSender> get_param_sender(bool use_extended,uint8_t target_comp_id);
+    std::shared_ptr<MavlinkParameterSender> get_param_sender(uint8_t target_comp_id,bool use_extended);
 private:
     //XXX begin
     std::shared_ptr<MavlinkParameterSender> get_param_senderX(std::optional<uint8_t> maybe_component_id,bool extended);
