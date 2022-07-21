@@ -160,6 +160,7 @@ public:
         ParamNameTooLong, /**< @brief Parameter name too long (> 16). */
         NoSystem, /**< @brief No system connected. */
         ParamValueTooLong, /**< @brief Param value too long (> 128). */
+        ValueUnsupported // for extended parameters protocol, change rejected by server
     };
 
     /**

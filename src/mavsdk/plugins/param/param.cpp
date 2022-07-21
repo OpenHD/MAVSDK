@@ -154,6 +154,8 @@ std::ostream& operator<<(std::ostream& str, Param::Result const& result)
             return str << "No System";
         case Param::Result::ParamValueTooLong:
             return str << "Param Value Too Long";
+        case Param::Result::ValueUnsupported:
+            return str << "Param rejected by server";
         default:
             return str << "Unknown";
     }

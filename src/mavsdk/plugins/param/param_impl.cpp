@@ -130,6 +130,8 @@ ParamImpl::result_from_mavlink_parameter_sender_result(MavlinkParameterSender::R
             return Param::Result::ConnectionError;
         case MavlinkParameterSender::Result::ParamValueTooLong:
             return Param::Result::ParamValueTooLong;
+        case MavlinkParameterSender::Result::ValueUnsupported:
+            return Param::Result::ValueUnsupported;
         default:
             LogErr() << "Unknown param error";
             return Param::Result::Unknown;
