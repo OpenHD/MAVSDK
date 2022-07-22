@@ -12,6 +12,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <optional>
 
 #include "mavsdk/plugin_base.h"
 
@@ -608,6 +609,24 @@ public:
      * @return Result of request.
      */
     Result set_current_speed(float speed_m_s) const;
+
+    // Hacky begin
+    struct CommandLong {
+        uint8_t target_system_id{0};
+        uint8_t target_component_id{0};
+        uint16_t command{0};
+        uint8_t confirmation = 0;
+        struct Params {
+            std::optional<float> maybe_param1{};
+            std::optional<float> maybe_param2{};
+            std::optional<float> maybe_param3{};
+            std::optional<float> maybe_param4{};
+            std::optional<float> maybe_param5{};
+            std::optional<float> maybe_param6{};
+            std::optional<float> maybe_param7{};
+        } params{};
+    };
+    Result send_command_long(CommandLong command);
 
     /**
      * @brief Copy constructor.

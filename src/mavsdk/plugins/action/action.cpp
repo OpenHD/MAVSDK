@@ -318,4 +318,12 @@ std::ostream& operator<<(std::ostream& str, Action::OrbitYawBehavior const& orbi
     }
 }
 
+// XXX begin
+Action::Result Action::send_command_long(CommandLong command){
+    /*_impl->send_command_long(command.target_system_id,command.target_component_id,command.command,command.confirmation,
+                             command.params.maybe_param1,command.params.maybe_param2,command.params.maybe_param3,command.params.maybe_param4,
+                             command.params.maybe_param5,command.params.maybe_param6);*/
+    return _impl->send_command_long(command);
+}
+
 } // namespace mavsdk
