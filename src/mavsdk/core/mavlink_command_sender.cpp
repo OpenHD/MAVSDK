@@ -15,6 +15,7 @@ MavlinkCommandSender::MavlinkCommandSender(SystemImpl& system_impl) : _parent(sy
             _command_debugging = true;
         }
     }
+    _command_debugging=true;
 
     _parent.register_mavlink_message_handler(
         MAVLINK_MSG_ID_COMMAND_ACK,
