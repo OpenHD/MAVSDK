@@ -10,7 +10,7 @@ on:
     branches:
     - '*'
   
-  jobs:
+jobs:
   
    dockcross-linux-arm:
     name: linux-${{ matrix.arch_name }}
