@@ -1,4 +1,4 @@
-name: [OHD] Build and Test
+name: OHD Build and Test
 
 on:
   push:
