@@ -1,4 +1,4 @@
-name: Build RPI
+name: Build RPI Legacy
 
 on: [push]
 
@@ -40,12 +40,10 @@ jobs:
             mkdir build 
             cd build
             mkdir MAVSDK-package
-            sudo bash
-            gpg --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
-            gpg --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
-            gpg --export 04EE7237B7D453EC | sudo apt-key add -
-            gpg --export 648ACFD622F3D138 | sudo apt-key add -
-            exit
+            sudo gpg --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
+            sudo gpg --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
+            sudo gpg --export 04EE7237B7D453EC | sudo apt-key add -
+            sudo gpg --export 648ACFD622F3D138 | sudo apt-key add -
             echo "deb http://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list.d/backports.list 
             apt update
             apt install -y cmake/buster-backports
