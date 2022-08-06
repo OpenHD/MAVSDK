@@ -1,4 +1,4 @@
-name: Build Jetson
+name: Build RPI Legacy
 
 on: [push]
 
@@ -8,24 +8,21 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     env:
       CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
-    - name: Emulating Jetson
-      id: qemu
-      uses: pguyot/arm-runner-action@1be4bc9de8a7ba3c1c4f5bf917c438e8dc97904b
+    - uses: pguyot/arm-runner-action@v2.3.1 
+      id: build_image
       with:
-        base_image: http://openhdfpv.org/wp-content/BaseImages/Open.HD-2.1-05221841-jetson-nano-4gb-bionic.img.zip
-        cpu: cortex-a53
-        bootpartition:
-        rootpartition: 1
+        base_image: https://downloads.raspberrypi.org/raspios_oldstable_armhf/images/raspios_oldstable_armhf-2022-04-07/2022-04-04-raspios-buster-armhf.img.xz
         image_additional_mb: 4000
         copy_repository_path: /opt
         bind_mount_repository: true
+        cpu: cortex-a7
         commands: |
             ls -a
             sudo chmod +x install_dep.sh
@@ -35,17 +32,23 @@ jobs:
             mkdir build 
             cd build
             mkdir MAVSDK-package
+            sudo gpg --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
+            sudo gpg --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
+            sudo gpg --export 04EE7237B7D453EC | sudo apt-key add -
+            sudo gpg --export 648ACFD622F3D138 | sudo apt-key add -
+            echo "deb http://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list.d/backports.list 
+            apt update
+            apt install -y cmake/buster-backports
             cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
             cmake --build build/default -j4
             sudo cmake --build build/default --target install
             VERSION="2.2.0-evo-$(date '+%m%d%H%M')-${VER2}"
-            fpm -a arm64 -s dir -t deb -n MAVSDK -v ${VERSION} -C MAVSDK-package
-            cp *.deb /opt/MAVSDK
-            cp *.deb /opt
-            ls -a /opt/MAVSDK
+            fpm -a armhf -s dir -t deb -n MAVSDK -v ${VERSION} -C MAVSDK-package
+            cp *.deb /opt/
+            ls -a
 
     - name: Debug
-      run: ls -a && pwd
+      run: ls -a && tree  
 
     - name: Upload to Github
       uses: 'actions/upload-artifact@v2'
@@ -64,8 +67,8 @@ jobs:
         format: "deb"
         owner: "openhd"
         repo: "openhd-2-2-evo"
-        distro: "ubuntu"
-        release: "bionic"
+        distro: "raspbian"
+        release: "buster"
         republish: "true" # needed ONLY if version is not changing
         file: "*.deb"
           
