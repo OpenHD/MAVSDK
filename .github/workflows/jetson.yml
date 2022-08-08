@@ -15,9 +15,9 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
-    - name: Emulating Jetson
+        - name: Emulating Jetson
       id: qemu
-      uses: pguyot/arm-runner-action@284a45c9d5983239745b7ceba40187cc81d316e4
+      uses: pguyot/arm-runner-action@1be4bc9de8a7ba3c1c4f5bf917c438e8dc97904b
       with:
         base_image: http://openhdfpv.org/wp-content/BaseImages/Open.HD-2.1-05221841-jetson-nano-4gb-bionic.img.zip
         cpu: cortex-a53
@@ -25,16 +25,13 @@ jobs:
         rootpartition: 1
         image_additional_mb: 4000
         copy_repository_path: /opt
-        bind_mount_repository: true
-        commands: |
+        copy_artifact_path: Open.HD
+        import_github_env: true
           ls -a
-          sudo apt install -y curl
           sudo rm -Rf /etc/apt/sources.list.d/openhd*
           sudo apt-get clean
-          sudo rm -rf /var/lib/apt/lists/*
-          sudo curl -1sLf \
-          'https://dl.cloudsmith.io/public/openhd/openhd-2-2-evo/setup.deb.sh' \
-          | sudo -E bash
+          wget https://dl.cloudsmith.io/public/openhd/openhd-2-2-evo/setup.deb.sh
+          sudo bash setup.deb.sh
           sudo chmod +x install_dep.sh
           sudo ./install_dep.sh
           VER2=$(git rev-parse --short HEAD)
