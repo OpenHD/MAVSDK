@@ -33,6 +33,14 @@ jobs:
         bind_mount_repository: true
         commands: |
             ls -a
+            apt update
+            apt install -y curl
+            rm -Rf /etc/apt/sources.list.d/openhd*
+            apt-get clean
+            rm -rf /var/lib/apt/lists/*
+            curl -1sLf \
+            'https://dl.cloudsmith.io/public/openhd/openhd-2-2-evo/setup.deb.sh' \
+            | sudo -E bash
             sudo chmod +x install_dep.sh
             sudo ./install_dep.sh
             VER2=$(git rev-parse --short HEAD)
