@@ -21,6 +21,7 @@ jobs:
         ls -a
         rm -Rf /etc/apt/sources.list.d/openhd*
         echo "debug1"
+        sudo apt install curl -y
         sudo apt-get clean
         echo "debug2"
         curl -1sLf \
