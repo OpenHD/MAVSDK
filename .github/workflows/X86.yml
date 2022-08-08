@@ -19,9 +19,10 @@ jobs:
     - name: Build
       run: |
         ls -a
-        sudo rm -Rf /etc/apt/sources.list.d/openhd*
+        rm -Rf /etc/apt/sources.list.d/openhd*
         sudo apt-get clean
-        sudo rm -rf /var/lib/apt/lists/*
+        rm -rf /var/lib/apt/lists/*
+        echo "debug"
         curl -1sLf \
         'https://dl.cloudsmith.io/public/openhd/openhd-2-2-evo/setup.deb.sh' \
         sudo -E bash
