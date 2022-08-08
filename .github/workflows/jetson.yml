@@ -26,7 +26,7 @@ jobs:
         rootpartition: 1
         image_additional_mb: 4000
         copy_repository_path: /opt
-        copy_artifact_path: Open.HD
+        copy_artifact_path: MAVSDK
         import_github_env: true
           ls -a
           sudo rm -Rf /etc/apt/sources.list.d/openhd*
