@@ -27,22 +27,29 @@ jobs:
         copy_repository_path: /opt
         bind_mount_repository: true
         commands: |
-            ls -a
-            sudo chmod +x install_dep.sh
-            sudo ./install_dep.sh
-            VER2=$(git rev-parse --short HEAD)
-            sudo apt install tree
-            mkdir build 
-            cd build
-            mkdir MAVSDK-package
-            cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
-            cmake --build build/default -j4
-            sudo cmake --build build/default --target install
-            VERSION="2.2.0-evo-$(date '+%m%d%H%M')-${VER2}"
-            fpm -a arm64 -s dir -t deb -n MAVSDK -v ${VERSION} -C MAVSDK-package
-            cp *.deb /opt/MAVSDK
-            cp *.deb /opt
-            ls -a /opt/MAVSDK
+          ls -a
+          sudo apt install -y curl
+          sudo rm -Rf /etc/apt/sources.list.d/openhd*
+          sudo apt-get clean
+          sudo rm -rf /var/lib/apt/lists/*
+          sudo curl -1sLf \
+          'https://dl.cloudsmith.io/public/openhd/openhd-2-2-evo/setup.deb.sh' \
+          | sudo -E bash
+          sudo chmod +x install_dep.sh
+          sudo ./install_dep.sh
+          VER2=$(git rev-parse --short HEAD)
+          sudo apt install tree
+          mkdir build 
+          cd build
+          mkdir MAVSDK-package
+          cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
+          cmake --build build/default -j4
+          sudo cmake --build build/default --target install
+          VERSION="2.2.1-evo-$(date '+%m%d%H%M')-${VER2}"
+          fpm -a arm64 -s dir -t deb -n MAVSDK -v ${VERSION} -C MAVSDK-package
+          cp *.deb /opt/MAVSDK
+          cp *.deb /opt
+          ls -a /opt/MAVSDK
 
     - name: Debug
       run: ls -a && pwd
