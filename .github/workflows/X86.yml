@@ -24,9 +24,8 @@ jobs:
         sudo apt install curl -y
         sudo apt-get clean
         echo "debug2"
-        curl -1sLf \
-        'https://dl.cloudsmith.io/public/openhd/openhd-2-2-evo/setup.deb.sh' \
-        sudo -E bash
+        wget https://dl.cloudsmith.io/public/openhd/openhd-2-2-evo/setup.deb.sh
+        sudo bash setup.deb.sh
         echo "debug3"
         sudo chmod +x install_dep.sh
         sudo ./install_dep.sh
