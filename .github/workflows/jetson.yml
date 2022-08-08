@@ -15,7 +15,6 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
-    
     - name: Emulating Jetson
       id: qemu
       uses: pguyot/arm-runner-action@1be4bc9de8a7ba3c1c4f5bf917c438e8dc97904b
@@ -26,28 +25,24 @@ jobs:
         rootpartition: 1
         image_additional_mb: 4000
         copy_repository_path: /opt
-        copy_artifact_path: MAVSDK
-        import_github_env: true
-          ls -a
-          sudo rm -Rf /etc/apt/sources.list.d/openhd*
-          sudo apt-get clean
-          wget https://dl.cloudsmith.io/public/openhd/openhd-2-2-evo/setup.deb.sh
-          sudo bash setup.deb.sh
-          sudo chmod +x install_dep.sh
-          sudo ./install_dep.sh
-          VER2=$(git rev-parse --short HEAD)
-          sudo apt install tree
-          mkdir build 
-          cd build
-          mkdir MAVSDK-package
-          cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
-          cmake --build build/default -j4
-          sudo cmake --build build/default --target install
-          VERSION="2.2.1-evo-$(date '+%m%d%H%M')-${VER2}"
-          fpm -a arm64 -s dir -t deb -n MAVSDK -v ${VERSION} -C MAVSDK-package
-          cp *.deb /opt/MAVSDK
-          cp *.deb /opt
-          ls -a /opt/MAVSDK
+        bind_mount_repository: true
+        commands: |
+            ls -a
+            sudo chmod +x install_dep.sh
+            sudo ./install_dep.sh
+            VER2=$(git rev-parse --short HEAD)
+            sudo apt install tree
+            mkdir build 
+            cd build
+            mkdir MAVSDK-package
+            cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
+            cmake --build build/default -j4
+            sudo cmake --build build/default --target install
+            VERSION="2.2.1-evo-$(date '+%m%d%H%M')-${VER2}"
+            fpm -a arm64 -s dir -t deb -n MAVSDK -v ${VERSION} -C MAVSDK-package
+            cp *.deb /opt/MAVSDK
+            cp *.deb /opt
+            ls -a /opt/MAVSDK
 
     - name: Debug
       run: ls -a && pwd
