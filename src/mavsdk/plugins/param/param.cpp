@@ -14,11 +14,13 @@ using FloatParam = Param::FloatParam;
 using CustomParam = Param::CustomParam;
 using AllParams = Param::AllParams;
 
-Param::Param(System& system) : PluginBase(), _impl{std::make_unique<ParamImpl>(system)} {}
-
-Param::Param(std::shared_ptr<System> system) :
+Param::Param(System& system,uint8_t target_component_id,bool use_extended) :
     PluginBase(),
-    _impl{std::make_unique<ParamImpl>(system)}
+    _impl{std::make_unique<ParamImpl>(system,target_component_id,use_extended)} {}
+
+Param::Param(std::shared_ptr<System> system,uint8_t target_component_id,bool use_extended) :
+    PluginBase(),
+    _impl{std::make_unique<ParamImpl>(system,target_component_id,use_extended)}
 {}
 
 Param::~Param() {}
@@ -53,13 +55,9 @@ Param::Result Param::set_param_custom(std::string name, std::string value) const
     return _impl->set_param_custom(name, value);
 }
 
-Param::AllParams Param::get_all_params() const
+Param::AllParams Param::get_all_params(bool clear_cache) const
 {
-    return _impl->get_all_params();
-}
-
-void Param::late_init(uint8_t target_component_id, bool use_extended) {
-    return _impl->late_init(target_component_id,use_extended);
+    return _impl->get_all_params(clear_cache);
 }
 
 bool operator==(const Param::IntParam& lhs, const Param::IntParam& rhs)
@@ -156,6 +154,8 @@ std::ostream& operator<<(std::ostream& str, Param::Result const& result)
             return str << "No System";
         case Param::Result::ParamValueTooLong:
             return str << "Param Value Too Long";
+        case Param::Result::ValueUnsupported:
+            return str << "Param rejected by server";
         default:
             return str << "Unknown";
     }

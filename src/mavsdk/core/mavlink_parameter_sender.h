@@ -34,9 +34,9 @@ public:
         TimeoutHandler& timeout_handler,
         TimeoutSCallback timeout_s_callback,
         // target component id (the param providing component this sender should talk to)
-        uint8_t target_component_id=MAV_COMP_ID_AUTOPILOT1,
+        uint8_t target_component_id,
         // weather to use the extended protocol or not - it is not possible to mix them up.
-        bool use_extended=false);
+        bool use_extended);
     ~MavlinkParameterSender();
     // Non-copyable
     MavlinkParameterSender(const MavlinkParameterSender&) = delete;
@@ -47,7 +47,7 @@ public:
      * @param target_component_id target component id (the param providing component this sender should talk to)
      * @param use_extended weather to use the extended protocol or not - it is not possible to mix them up.
      */
-    void late_init(uint8_t target_component_id,bool use_extended);
+    //void late_init(uint8_t target_component_id,bool use_extended);
 
     enum class Result {
         Success,
@@ -215,9 +215,9 @@ private:
     TimeoutHandler& _timeout_handler;
     TimeoutSCallback _timeout_s_callback;
     // target component id (the param providing component this sender should talk to)
-    uint8_t _target_component_id=MAV_COMP_ID_AUTOPILOT1;
+    const uint8_t _target_component_id=MAV_COMP_ID_AUTOPILOT1;
     // weather to use the extended protocol or not - it is not possible to mix them up.
-    bool _use_extended=false;
+    const bool _use_extended=false;
 
     // These are specific depending on the work item type
     struct WorkItemSet{
@@ -263,6 +263,7 @@ private:
     ParamSetFromServer _param_set_from_server;
 
     bool _parameter_debugging=true;
+    bool mismatch_debugging=false; // These are not errors, but can be helpfull for debugging
 
     // Validate if the response matches what was given in the work queue - aka
     // if original==std::string, check against the provided param id. Otherwise, check against the provided param_index

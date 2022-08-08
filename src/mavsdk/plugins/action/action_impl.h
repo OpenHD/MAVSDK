@@ -99,7 +99,10 @@ public:
 
     Action::Result set_return_to_launch_altitude(const float relative_altitude_m) const;
     std::pair<Action::Result, float> get_return_to_launch_altitude() const;
-
+    // XXX
+    void send_command_long_async(Action::CommandLong command,const Action::ResultCallback& callback) const;
+    Action::Result send_command_long(Action::CommandLong command);
+    static MavlinkCommandSender::CommandLong command_long_impl_from_command_long(Action::CommandLong command);
 private:
     void process_extended_sys_state(const mavlink_message_t& message);
 

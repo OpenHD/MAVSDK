@@ -36,7 +36,7 @@ public:
      *
      * @param system The specific system associated with this plugin.
      */
-    explicit Param(System& system); // deprecated
+    explicit Param(System& system,uint8_t target_component_id=1,bool use_extended=false); // deprecated
 
     /**
      * @brief Constructor. Creates the plugin for a specific System.
@@ -49,7 +49,7 @@ public:
      *
      * @param system The specific system associated with this plugin.
      */
-    explicit Param(std::shared_ptr<System> system); // new
+    explicit Param(std::shared_ptr<System> system,uint8_t target_component_id=1,bool use_extended=false); // new
 
     /**
      * @brief Destructor (internal use only).
@@ -160,6 +160,7 @@ public:
         ParamNameTooLong, /**< @brief Parameter name too long (> 16). */
         NoSystem, /**< @brief No system connected. */
         ParamValueTooLong, /**< @brief Param value too long (> 128). */
+        ValueUnsupported // for extended parameters protocol, change rejected by server
     };
 
     /**
@@ -247,9 +248,7 @@ public:
      *
      * @return Result of request.
      */
-    Param::AllParams get_all_params() const;
-
-    void late_init(uint8_t target_component_id,bool use_extended);
+    Param::AllParams get_all_params(bool clear_cache=false) const;
 
     /**
      * @brief Copy constructor.

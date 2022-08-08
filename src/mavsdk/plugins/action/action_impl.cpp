@@ -696,6 +696,21 @@ Action::Result ActionImpl::action_result_from_command_result(MavlinkCommandSende
     }
 }
 
+MavlinkCommandSender::CommandLong ActionImpl::command_long_impl_from_command_long(Action::CommandLong command){
+    MavlinkCommandSender::CommandLong ret{};
+    ret.target_system_id=command.target_system_id;
+    ret.target_component_id=command.target_component_id;
+    ret.command=command.command;
+    ret.confirmation=command.confirmation;
+    ret.params.maybe_param1=command.params.maybe_param1;
+    ret.params.maybe_param2=command.params.maybe_param2;
+    ret.params.maybe_param3=command.params.maybe_param3;
+    ret.params.maybe_param4=command.params.maybe_param4;
+    ret.params.maybe_param5=command.params.maybe_param5;
+    ret.params.maybe_param6=command.params.maybe_param6;
+    return ret;
+}
+
 void ActionImpl::command_result_callback(
     MavlinkCommandSender::Result command_result, const Action::ResultCallback& callback) const
 {
@@ -706,6 +721,24 @@ void ActionImpl::command_result_callback(
         _parent->call_user_callback(
             [temp_callback, action_result]() { temp_callback(action_result); });
     }
+}
+
+// XXX
+void ActionImpl::send_command_long_async(Action::CommandLong command,const Action::ResultCallback& callback)const{
+    auto converted= command_long_impl_from_command_long(command);
+    _parent->send_command_async(
+        converted, [this, callback](MavlinkCommandSender::Result result, float) {
+            command_result_callback(result, callback);
+        });
+}
+
+Action::Result ActionImpl::send_command_long(Action::CommandLong command){
+    auto prom = std::promise<Action::Result>();
+    auto fut = prom.get_future();
+
+    send_command_long_async(command,[&prom](Action::Result result) { prom.set_value(result); });
+
+    return fut.get();
 }
 
 } // namespace mavsdk

@@ -48,12 +48,12 @@ MavlinkParameterSender::MavlinkParameterSender(
     //}
 }
 
-void MavlinkParameterSender::late_init(uint8_t target_component_id, bool use_extended) {
+/*void MavlinkParameterSender::late_init(uint8_t target_component_id, bool use_extended) {
     _target_component_id=target_component_id;
     _use_extended=use_extended;
     // if the target comp id or the usage of extended / non-extended changes, we need to clear the cache
     _param_set_from_server.clear();
-}
+}*/
 
 MavlinkParameterSender::~MavlinkParameterSender()
 {
@@ -1028,8 +1028,10 @@ MavlinkParameterSender::GetParamAnyCallback MavlinkParameterSender::create_recur
 bool MavlinkParameterSender::source_matches(uint8_t source_sys_id,uint8_t source_comp_id)const{
     const bool matches=source_sys_id==_sender.get_system_id() && source_comp_id== _target_component_id;
     if(!matches){
-        LogDebug()<<"Skipping message coming from {"<<(int)source_sys_id<<":"<<(int)source_comp_id<<"} "
-                   <<" since we talk to {"<<(int)_sender.get_system_id()<<":"<<(int)_target_component_id<<"}";
+        if(mismatch_debugging){
+            LogDebug()<<"Skipping message coming from {"<<(int)source_sys_id<<":"<<(int)source_comp_id<<"} "
+                       <<" since we talk to {"<<(int)_sender.get_system_id()<<":"<<(int)_target_component_id<<"}";
+        }
     }
 
     return matches;

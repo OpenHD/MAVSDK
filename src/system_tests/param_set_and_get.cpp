@@ -35,7 +35,7 @@ TEST(SystemTest, ParamSetAndGet)
 
     ASSERT_TRUE(system->has_autopilot());
 
-    auto param = Param{system};
+    auto param = Param{system,1,true};
 
     // First we try to get a param before it is available.
     // Disabled for now because the timeouts make it very slow to run.
