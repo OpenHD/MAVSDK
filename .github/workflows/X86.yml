@@ -19,8 +19,6 @@ jobs:
     - name: Build
       run: |
         ls -a
-        sudo apt update
-        sudo apt install -y curl
         sudo rm -Rf /etc/apt/sources.list.d/openhd*
         sudo apt-get clean
         sudo rm -rf /var/lib/apt/lists/*
