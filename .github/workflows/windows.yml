@@ -1,4 +1,6 @@
- Windows:
+
+on: [push]
+
     name: Windows
     runs-on: windows-latest
     steps:
