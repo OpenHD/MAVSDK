@@ -41,7 +41,7 @@ jobs:
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
-        name: "MAVSDK"
-        path: |
-          *.zip
-          *.exe
+          name: "MAVSDK"
+          path: |
+            *.zip
+            *.exe
