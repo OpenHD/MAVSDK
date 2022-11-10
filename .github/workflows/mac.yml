@@ -1,4 +1,4 @@
-name: Build Windows
+name: Build Mac
 
 on: [push]
 
@@ -8,7 +8,14 @@ env:
 
 jobs:
   build:
-    runs-on: windows-latest
+       runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - name: macOS
+            build-framework: OFF
+          - name: macOS-framework
+            build-framework: ON
     steps:
       - uses: actions/checkout@v2
         with:
@@ -16,44 +23,40 @@ jobs:
       - uses: actions/cache@v2
         id: cache
         with:
-          path: ./build/release/third_party/install
-          key: ${{ github.job }}-${{ hashFiles('./third_party/**') }}-2
+          path: ./build/macos/third_party/install
+          key: ${{ github.job }}-${{ matrix.name }}-${{ hashFiles('./third_party/**') }}
+      - name: fetch git tags for version
+        run: git fetch --prune --unshallow --tags
       - name: disable superbuild on cache hit
         if: steps.cache.outputs.cache-hit == 'true'
-        run: |
-            echo "superbuild=-DSUPERBUILD=OFF" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-            echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=$(pwd)/build/release/third_party/install" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-      - name: install packages
-        run: |
-            choco install nasm
-            echo "C:\Program Files\NASM" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        run: echo "superbuild=-DSUPERBUILD=OFF" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=$(pwd)/build/macos/third_party/install" >> $GITHUB_ENV
+      - name: set SDKROOT value
+        run: echo "SDKROOT=$(xcrun --sdk macosx --show-sdk-path)" >> $GITHUB_ENV
       - name: install pymavlink dependencies
-        run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install wheel
-          python3 -m pip install future
+        run: python3 -m pip install future
       - name: configure
-        run: cmake -G "Visual Studio 17 2022" $env:superbuild $env:cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/release/install -DBUILD_MAVSDK_SERVER=ON -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/release -S.
+        run: cmake $superbuild $cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/macos/install -DBUILD_MAVSDK_SERVER=ON -DBUILD_SHARED_LIBS=OFF -DMACOS_FRAMEWORK=${{ matrix.build-framework }} -DWERROR=OFF -Bbuild/macos -H.
       - name: build
-        run: cmake --build build/release -j2 --config Release --target install
-      - name: Create zip file mavsdk libraries
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: cd build/release/install && 7z.exe a -tzip ../../../mavsdk-windows-x64-release.zip . && cd ../../..
-      - name: Publish mavsdk libraries
-        if: startsWith(github.ref, 'refs/tags/v')
+        run: cmake --build build/macos -j2 --target install
+      - name: unit tests
+        run: ./build/macos/src/unit_tests/unit_tests_runner
+      - name: system tests
+        run: ./build/macos/src/system_tests/system_tests_runner
+      - name: test (mavsdk_server)
+        run: ./build/macos/src/mavsdk_server/test/unit_tests_mavsdk_server
+      - name: Upload framework as artefact
+        if: ${{ matrix.build-framework == 'ON' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: mavsdk_server_macos.framework
+          path: ./build/macos/src/mavsdk_server/src/mavsdk_server.framework
+          retention-days: 2
+      - name: Publish mavsdk_server_macos to github release
+        if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.build-framework == 'OFF' }}
         uses: svenstaro/upload-release-action@v1-release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: 'mavsdk-windows-x64-release.zip'
-          asset_name: 'mavsdk-windows-x64-release.zip'
-          tag: ${{ github.ref }}
-          overwrite: true
-      - name: Publish mavsdk_server binary
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: svenstaro/upload-release-action@v1-release
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: 'build/release/install/bin/mavsdk_server_bin.exe'
-          asset_name: 'mavsdk_server_win32.exe'
+          file: 'build/macos/install/bin/mavsdk_server'
+          asset_name: 'mavsdk_server_macos'
           tag: ${{ github.ref }}
           overwrite: true
