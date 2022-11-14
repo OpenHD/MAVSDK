@@ -1,4 +1,4 @@
-name: Build X86
+name: Build X86 20.04
 
 on: [push]
 
@@ -62,7 +62,7 @@ jobs:
         owner: "openhd"
         repo: "openhd-2-2-evo"
         distro: "ubuntu"
-        release: "focal"
+        release: "jammy"
         file: "*.deb"
           
           

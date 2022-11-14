@@ -1,0 +1,77 @@
+name: Build X86 20.04
+
+on: [push]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Build
+      run: |
+        ls -a
+        rm -Rf /etc/apt/sources.list.d/openhd*
+        echo "debug1"
+        sudo apt install curl -y
+        sudo apt-get clean
+        echo "debug2"
+        wget https://dl.cloudsmith.io/public/openhd/openhd-2-2-evo/setup.deb.sh
+        sudo bash setup.deb.sh
+        echo "debug3"
+        sudo chmod +x install_dep.sh
+        sudo ./install_dep.sh
+        echo "debug4"
+        VER2=$(git rev-parse --short HEAD)
+        mkdir build 
+        cd build
+        mkdir MAVSDK-package
+        cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
+        cmake --build build/default -j4
+        sudo cmake --build build/default --target install
+        VERSION="2.2.1-evo-$(date '+%m%d%H%M')-${VER2}"
+        fpm -a x86_64 -s dir -t deb -n MAVSDK -v ${VERSION} -C MAVSDK-package
+        cp *.deb ../
+        cd ../
+        cp *.deb ../
+        ls -a
+
+    - name: Upload to Github
+      uses: 'actions/upload-artifact@v2'
+      with:
+        name: "MAVSDK"
+        path: |
+          *.deb
+          *.log
+
+    - name: Push
+      id: push
+      uses: cloudsmith-io/action@master
+      with:
+        api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+        command: "push"
+        format: "deb"
+        owner: "openhd"
+        repo: "openhd-2-2-evo"
+        distro: "ubuntu"
+        release: "focal"
+        file: "*.deb"
+          
+          
+      #- name: Install
+      #  run: |
+      #    cd OpenHD/build
+      #    sudo cmake --install .
+      #- name: Build ninja
+      #  run: |
+      #    sudo apt -y install ninja-build
+      #    cd OpenHD
+      #    ./build_cmake.sh
