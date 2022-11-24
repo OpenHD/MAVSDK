@@ -18,6 +18,7 @@
 #include <map>
 #include <optional>
 #include <variant>
+#include <atomic>
 
 namespace mavsdk {
 
@@ -203,6 +204,10 @@ public:
     friend std::ostream& operator<<(std::ostream&, const Result&);
     friend std::ostream& operator<<(std::ostream&, const GetAllParamsResult&);
 
+    // overwrites the timeout from system (a global timeout value is not enough)
+    void set_timeout_seconds(double timeout_seconds);
+
+    void set_n_retransmissions(int n_retransmissions);
 private:
 
     void process_param_value(const mavlink_message_t& message);
@@ -218,6 +223,11 @@ private:
     const uint8_t _target_component_id=MAV_COMP_ID_AUTOPILOT1;
     // weather to use the extended protocol or not - it is not possible to mix them up.
     const bool _use_extended=false;
+
+    // default to -1, which means use the timeout specified globally
+    std::atomic<double> m_curr_timeout_seconds{-1};
+    // default to 3 retransmissions if we do not get the proper ack from the server
+    std::atomic<int> m_curr_n_retransmissions{3};
 
     // These are specific depending on the work item type
     struct WorkItemSet{
@@ -280,6 +290,9 @@ private:
     // 2) If yes, request the first missing parameter and recursively add the same callback to check and request again
     // 3) If no, terminate.
     GetParamAnyCallback create_recursive_callback();
+
+    double get_current_timeout_seconds();
+    int get_current_n_retransmissions();
 };
 
 } // namespace mavsdk

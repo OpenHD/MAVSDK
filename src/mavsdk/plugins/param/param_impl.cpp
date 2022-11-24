@@ -138,4 +138,14 @@ ParamImpl::result_from_mavlink_parameter_sender_result(MavlinkParameterSender::R
     }
 }
 
+void ParamImpl::set_n_retransmissions(int n_retransmissions){
+    auto param_server=_parent->get_param_sender(_target_component_id,_use_extended);
+    param_server->set_n_retransmissions(n_retransmissions);
+}
+
+void ParamImpl::set_timeout(double timeout_s){
+    auto param_server=_parent->get_param_sender(_target_component_id,_use_extended);
+    param_server->set_timeout_seconds(timeout_s);
+}
+
 } // namespace mavsdk
