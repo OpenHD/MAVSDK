@@ -60,6 +60,15 @@ Param::AllParams Param::get_all_params(bool clear_cache) const
     return _impl->get_all_params(clear_cache);
 }
 
+void Param::set_n_retransmissions(int n_retransmissions){
+    _impl->set_n_retransmissions(n_retransmissions);
+}
+
+void Param::set_timeout(double timeout_s){
+    _impl->set_timeout(timeout_s);
+}
+
+
 bool operator==(const Param::IntParam& lhs, const Param::IntParam& rhs)
 {
     return (rhs.name == lhs.name) && (rhs.value == lhs.value);

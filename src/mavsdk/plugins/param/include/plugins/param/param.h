@@ -260,6 +260,10 @@ public:
      */
     const Param& operator=(const Param&) = delete;
 
+    void set_n_retransmissions(int n_retransmissions);
+
+    void set_timeout(double timeout_s);
+
 private:
     /** @private Underlying implementation, set at instantiation */
     std::unique_ptr<ParamImpl> _impl;

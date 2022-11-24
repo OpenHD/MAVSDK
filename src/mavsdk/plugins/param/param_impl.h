@@ -34,6 +34,10 @@ public:
 
     Param::AllParams get_all_params(bool clear_cache);
 
+    void set_n_retransmissions(int n_retransmissions);
+
+    void set_timeout(double timeout_s);
+
 private:
     const uint8_t _target_component_id;
     const bool _use_extended;

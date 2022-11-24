@@ -94,7 +94,7 @@ void MavlinkParameterSender::set_param_async(
         }
         return;
     }
-    auto new_work = std::make_shared<WorkItem>(_timeout_s_callback(),
+    auto new_work = std::make_shared<WorkItem>(get_current_timeout_seconds(),
                                                WorkItemSet{name,value,callback},cookie);
     _work_queue.push_back(new_work);
 }
@@ -268,7 +268,7 @@ void MavlinkParameterSender::get_param_async(
         return;
     }
     // Otherwise, push work onto queue.
-    auto new_work = std::make_shared<WorkItem>(_timeout_s_callback(),WorkItemGet{name,callback},cookie);
+    auto new_work = std::make_shared<WorkItem>(get_current_timeout_seconds(),WorkItemGet{name,callback},cookie);
     // We don't need to know the exact type when getting a value - neither extended or non-extended protocol mavlink messages
     // specify the exact type on a "get_xxx" message. This makes total sense. The client still can reason about the type and return
     // the proper error codes, it just needs to delay these checks until a response from the server has been received.
@@ -430,7 +430,7 @@ void MavlinkParameterSender::get_all_params_async(GetAllParamsCallback callback,
     // _all_params_callback member is called. Otherwise, we get a timeout at some point, which then calls
     // the _all_params_callback member with an empty result.
     _timeout_handler.add(
-        [this] { receive_timeout(); }, _timeout_s_callback(), &_all_params_timeout_cookie);
+        [this] { receive_timeout(); }, get_current_timeout_seconds(), &_all_params_timeout_cookie);
 }
 
 std::map<std::string, ParamValue> MavlinkParameterSender::get_all_params(bool clear_cache)
@@ -956,7 +956,7 @@ void MavlinkParameterSender::add_param_to_cached_parameter_set(const std::string
             _timeout_handler.remove(_all_params_timeout_cookie);
             _timeout_handler.add(
                 [this] { receive_timeout(); },
-                _timeout_s_callback(),
+                get_current_timeout_seconds(),
                 &_all_params_timeout_cookie);
         }
     }
@@ -983,7 +983,7 @@ void MavlinkParameterSender::check_all_params_timeout() {
                 // We add the first missing parameter to the work queue, once we've gotten a result of this operation we can fetch the next one.
                 const auto first_missing_param=missing_param_indices.at(0);
                 LogDebug()<<"Requesting missing parameter "<<(int)first_missing_param;
-                auto new_work = std::make_shared<WorkItem>(_timeout_s_callback(),
+                auto new_work = std::make_shared<WorkItem>(get_current_timeout_seconds(),
                                                            WorkItemGet{static_cast<int16_t>(first_missing_param),create_recursive_callback()}, this);
                 _work_queue.push_back(new_work);
             }
@@ -1004,7 +1004,7 @@ MavlinkParameterSender::GetParamAnyCallback MavlinkParameterSender::create_recur
               // Request the next parameter still missing
               const auto next_missing_param=missing.at(0);
               LogDebug()<<"Requesting missing parameter "<<(int)next_missing_param;
-              auto new_work = std::make_shared<WorkItem>(_timeout_s_callback(),
+              auto new_work = std::make_shared<WorkItem>(get_current_timeout_seconds(),
                                                          WorkItemGet{static_cast<int16_t>(next_missing_param),create_recursive_callback()}, this);
               _work_queue.push_back(new_work);
           }
@@ -1035,6 +1035,28 @@ bool MavlinkParameterSender::source_matches(uint8_t source_sys_id,uint8_t source
     }
 
     return matches;
+}
+
+double MavlinkParameterSender::get_current_timeout_seconds()
+{
+    const double custom_timeout=m_curr_timeout_seconds;
+    if(custom_timeout>=0){
+        return custom_timeout;
+    }
+    return _timeout_s_callback();
+}
+
+void MavlinkParameterSender::set_timeout_seconds(double timeout_seconds) {
+    m_curr_timeout_seconds=timeout_seconds;
+}
+
+void MavlinkParameterSender::set_n_retransmissions(int n_retransmissions) {
+    m_curr_n_retransmissions=n_retransmissions;
+}
+
+int MavlinkParameterSender::get_current_n_retransmissions()
+{
+    return m_curr_n_retransmissions;
 }
 
 } // namespace mavsdk
