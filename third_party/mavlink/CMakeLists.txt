@@ -19,7 +19,7 @@ ExternalProject_add(
     mavlink
     #GIT_REPOSITORY https://github.com/mavlink/mavlink
     GIT_REPOSITORY https://github.com/OpenHD/mavlink.git
-    GIT_TAG ae7c7c241e35fd71128ab042fe674034ccacaf2c
+    GIT_TAG f045e5c329debc5a99c1377e31189be2c7558e1a
     PREFIX mavlink
     CONFIGURE_COMMAND Python3::Interpreter
         -m pymavlink.tools.mavgen
