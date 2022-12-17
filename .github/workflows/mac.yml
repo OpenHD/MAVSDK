@@ -32,6 +32,8 @@ jobs:
         run: echo "superbuild=-DSUPERBUILD=OFF" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=$(pwd)/build/macos/third_party/install" >> $GITHUB_ENV
       - name: set SDKROOT value
         run: echo "SDKROOT=$(xcrun --sdk macosx --show-sdk-path)" >> $GITHUB_ENV
+      - name: update pip
+        run: python3 -m pip install --upgrade pip
       - name: install pymavlink dependencies
         run: python3 -m pip install future
       - name: configure
