@@ -27,9 +27,6 @@ jobs:
           key: ${{ github.job }}-${{ matrix.name }}-${{ hashFiles('./third_party/**') }}
       - name: fetch git tags for version
         run: git fetch --prune --unshallow --tags
-      - name: disable superbuild on cache hit
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: echo "superbuild=-DSUPERBUILD=OFF" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=$(pwd)/build/macos/third_party/install" >> $GITHUB_ENV
       - name: set SDKROOT value
         run: echo "SDKROOT=$(xcrun --sdk macosx --show-sdk-path)" >> $GITHUB_ENV
       - name: install pymavlink dependencies
@@ -37,6 +34,7 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install wheel
           python3 -m pip install future
+          alias python=python3
       - name: configure
         run: cmake $superbuild $cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/macos/install -DBUILD_MAVSDK_SERVER=ON -DBUILD_SHARED_LIBS=OFF -DMACOS_FRAMEWORK=${{ matrix.build-framework }} -DWERROR=OFF -Bbuild/macos -H.
       - name: build
