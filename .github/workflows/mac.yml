@@ -21,6 +21,8 @@ jobs:
         with:
           submodules: recursive
       - name: fetch git tags for version
+        run: git submodule update --recursive --remote
+      - name: fetch git tags for version
         run: git fetch --prune --unshallow --tags
       - name: set SDKROOT value
         run: echo "SDKROOT=$(xcrun --sdk macosx --show-sdk-path)" >> $GITHUB_ENV
