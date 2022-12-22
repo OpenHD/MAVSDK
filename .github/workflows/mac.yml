@@ -38,7 +38,7 @@ jobs:
           python -V
           python3 -V
       - name: configure
-        run: cmake $superbuild $cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/macos/install -DBUILD_MAVSDK_SERVER=ON -DBUILD_SHARED_LIBS=OFF -DMACOS_FRAMEWORK=${{ matrix.build-framework }} -DWERROR=OFF -Bbuild/macos -H.
+        run: cmake $cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/macos/install -DBUILD_MAVSDK_SERVER=ON -DBUILD_SHARED_LIBS=OFF -DMACOS_FRAMEWORK=${{ matrix.build-framework }} -DWERROR=OFF -Bbuild/macos -H.
       - name: build
         run: cmake --build build/macos -j2 --target install
       - name: unit tests
