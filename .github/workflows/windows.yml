@@ -49,3 +49,19 @@ jobs:
       - name: Build
         run:  |
           ls -a
+          python3 -m pip install --upgrade pip
+          python3 -m pip install wheel
+          python3 -m pip install future
+          cmake -DCMAKE_INSTALL_PREFIX=build/debug/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/debug -H. -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build/debug -j8 --config Debug --target install
+          ls -a
+      
+      - name: Create zip file mavsdk libraries
+        run: cd build/debug/install && 7z.exe a -tzip ../../../mavsdk-windows-x64-release.zip . && cd ../../..
+      - name: Upload to Github
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: "MAVSDK"
+          path: |
+            *.zip
+            *.exe
