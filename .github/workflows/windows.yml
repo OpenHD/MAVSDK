@@ -1,7 +1,6 @@
 name: Windows Release
 
-on:
-  push:
+on: [push]
 
 defaults:
   run:
