@@ -16,13 +16,13 @@ jobs:
       - uses: actions/cache@v2
         id: cache
         with:
-          path: ./build/release/third_party/install
+          path: ./build/debug/third_party/install
           key: ${{ github.job }}-${{ hashFiles('./third_party/**') }}-2
       - name: disable superbuild on cache hit
         if: steps.cache.outputs.cache-hit == 'true'
         run: |
             echo "superbuild=-DSUPERBUILD=OFF" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-            echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=$(pwd)/build/release/third_party/install" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=$(pwd)/build/debug/third_party/install" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: install packages
         run: |
             choco install nasm
@@ -33,9 +33,9 @@ jobs:
           python3 -m pip install wheel
           python3 -m pip install future
       - name: configure
-        run: cmake -G "Visual Studio 17 2022" $env:cmake_prefix_path -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=build/release/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/release -S.
+        run: cmake -G "Visual Studio 17 2022" $env:cmake_prefix_path -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=build/debug/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/debug -S.
       - name: build
-        run: cmake --build build/release -j2 --config Debug --target install
+        run: cmake --build build/debug -j2 --config Debug --target install
       - name: Create zip file mavsdk libraries
         run: cd build/debug/install && 7z.exe a -tzip ../../../mavsdk-windows-x64-release.zip . && cd ../../..
       - name: Upload to Github
