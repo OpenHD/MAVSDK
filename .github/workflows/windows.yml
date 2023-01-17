@@ -33,7 +33,7 @@ jobs:
           python3 -m pip install wheel
           python3 -m pip install future
       - name: configure
-        run: cmake -G "Visual Studio 19 2022" $env:cmake_prefix_path -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=build/debug/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/debug -S.
+        run: cmake -G "Visual Studio 16 2019" $env:cmake_prefix_path -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=build/debug/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/debug -S.
       - name: build
         run: cmake --build build/debug -j2 --config Debug --target install
       - name: Create zip file mavsdk libraries
