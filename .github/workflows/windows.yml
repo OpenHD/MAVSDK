@@ -1,0 +1,67 @@
+name: Windows Release
+
+on: [push]
+
+defaults:
+  run:
+    shell: cmd
+
+env:
+  SOURCE_DIR:   ${{ github.workspace }}
+  ARTIFACT:     QOpenHD-Evo.zip
+
+jobs:
+  build:
+    runs-on:  windows-2019
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            p7zip
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          aqtversion: '==2.1.*'
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2019_64'
+          tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
+          setup-python: false
+      
+      - name: Download JOM
+        uses: suisei-cn/actions-download-file@v1
+        with:
+          url:    http://download.qt.io/official_releases/jom/jom.zip
+
+      - name: Unzip JOM
+        run:  |
+              7z x jom.zip -ojom
+              
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Build
+        run:  |
+          ls -a
+          python3 -m pip install --upgrade pip
+          python3 -m pip install wheel
+          python3 -m pip install future
+          cmake -DCMAKE_INSTALL_PREFIX=build/debug/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/debug -H. -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build/debug -j8 --config Debug --target install
+          ls -a
+      
+      - name: Create zip file mavsdk libraries
+        run: cd build/debug/install && 7z.exe a -tzip ../../../mavsdk-windows-x64-release.zip . && cd ../../..
+      - name: Upload to Github
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: "MAVSDK"
+          path: |
+            *.zip
+            *.exe
