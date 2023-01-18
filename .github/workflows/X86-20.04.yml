@@ -37,7 +37,7 @@ jobs:
         cmake -Bbuild/default -DCMAKE_INSTALL_PREFIX=MAVSDK-package/usr -DCMAKE_BUILD_TYPE=Release -H..
         cmake --build build/default -j4
         sudo cmake --build build/default --target install
-        VERSION="2.2.1-evo-$(date '+%m%d%H%M')-${VER2}"
+        VERSION="2.3-evo-dev-$(date '+%m%d%H%M')-${VER2}"
         fpm -a x86_64 -s dir -t deb -n MAVSDK -v ${VERSION} -C MAVSDK-package
         cp *.deb ../
         cd ../
@@ -60,7 +60,7 @@ jobs:
         command: "push"
         format: "deb"
         owner: "openhd"
-        repo: "openhd-2-2-evo"
+        repo: "openhd-2-3-dev"
         distro: "ubuntu"
         release: "focal"
         file: "*.deb"
