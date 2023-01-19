@@ -27,10 +27,6 @@ jobs:
           submodules: recursive
       - name: install pymavlink dependencies
         run: sudo apt-get update && sudo apt-get install -y python3 python3-future
-      - name: prepare mavlink headers
-        run: tools/generate_mavlink_headers.sh
-      - name: debug
-        run: ls /home/runner/work/MAVSDK/MAVSDK/mavlink-headers/include/mavlink/v2.0
       - name: setup dockcross
         run: docker run --rm dockcross/${{ matrix.name }} > ./dockcross-${{ matrix.name }}; chmod +x ./dockcross-${{ matrix.name }}
       - uses: actions/cache@v2
@@ -42,7 +38,7 @@ jobs:
         if: steps.cache.outputs.cache-hit == 'true'
         run: echo "superbuild=-DSUPERBUILD=OFF" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=/work/build/${{ matrix.name }}/third_party/install" >> $GITHUB_ENV
       - name: configure
-        run: ./dockcross-${{ matrix.name }} /bin/bash -c "cmake $superbuild $cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/${{ matrix.name }}/install -DBUILD_MAVSDK_SERVER=ON -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -DMAVLINK_HEADERS=mavlink-headers/include -Bbuild/${{ matrix.name }} -H."
+        run: ./dockcross-${{ matrix.name }} /bin/bash -c "cmake $superbuild $cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/${{ matrix.name }}/install -DBUILD_MAVSDK_SERVER=ON -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -H."
       - name: build
         run: ./dockcross-${{ matrix.name }} cmake --build build/${{ matrix.name }} -j4 --target install
       - name: create tar with header and library
