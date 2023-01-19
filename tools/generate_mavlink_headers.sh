@@ -13,9 +13,7 @@ MAVLINK_HEADERS_PATH=mavlink-headers
 mkdir $MAVLINK_PATH
 cd $MAVLINK_PATH 
 git clone --recurse-submodules -b $TAG $REPO 
-cd pymavlink
-git pull
-ls
+cd mavlink
 
 OUTPUT_PATH="$MAVLINK_HEADERS_PATH/include/mavlink/v2.0/"
 mkdir -p "$OUTPUT_PATH"
