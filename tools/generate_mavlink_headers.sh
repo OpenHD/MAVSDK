@@ -10,6 +10,7 @@ MAVLINK_DIALECT=common
 MAVLINK_PATH=mavlink
 MAVLINK_HEADERS_PATH=mavlink-headers
 
+mkdir $MAVLINK_PATH
 cd $MAVLINK_PATH && git clone $REPO && git checkout $TAG && git submodule update --init --recursive
 
 OUTPUT_PATH="$MAVLINK_HEADERS_PATH/include/mavlink/v2.0/"
