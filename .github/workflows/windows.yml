@@ -52,12 +52,12 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install wheel
           python3 -m pip install future
-          cmake -DCMAKE_INSTALL_PREFIX=build/release/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/release -H. -DCMAKE_BUILD_TYPE=Release
-          cmake --build build/release -j8 --config Release --target install
+          cmake -DCMAKE_INSTALL_PREFIX=build/release/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/default -DCMAKE_BUILD_TYPE=Release -H. 
+          cmake --build build/default -j8 --config Release --target install
           ls -a
       
       - name: Create zip file mavsdk libraries
-        run: cd build/release/install && 7z.exe a -tzip ../../../mavsdk-windows-x64-release.zip . && cd ../../..
+        run: cd build/release/install && 7z.exe a -tzip ../../../mavsdk-windows-x64-release_r.zip . && cd ../../..
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
