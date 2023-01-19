@@ -11,11 +11,16 @@ MAVLINK_PATH=mavlink
 MAVLINK_HEADERS_PATH=mavlink-headers
 
 mkdir $MAVLINK_PATH
+echo ($PWD)
 cd $MAVLINK_PATH 
 git clone --recurse-submodules -b $TAG $REPO 
 ls
 cd mavlink 
 mv * ../
+ls
+echo "debug"
+cd ..
+ls
 
 OUTPUT_PATH="$MAVLINK_HEADERS_PATH/include/mavlink/v2.0/"
 mkdir -p "$OUTPUT_PATH"
