@@ -10,16 +10,13 @@ MAVLINK_DIALECT=common
 MAVLINK_PATH=mavlink
 MAVLINK_HEADERS_PATH=mavlink-headers
 
-if [ ! -d $MAVLINK_PATH ]
-then
-    git clone --recursive $REPO $MAVLINK_PATH
-fi
-
-(cd $MAVLINK_PATH && git checkout $TAG && git submodule update --init --recursive)
+cd $MAVLINK_PATH && git clone $REPO && git checkout $TAG && git submodule update --init --recursive
 
 OUTPUT_PATH="$MAVLINK_HEADERS_PATH/include/mavlink/v2.0/"
 mkdir -p "$OUTPUT_PATH"
 OUTPUT_PATH=$(realpath $OUTPUT_PATH)
+
+tree
 
 (cd $MAVLINK_PATH && \
     python3 \
