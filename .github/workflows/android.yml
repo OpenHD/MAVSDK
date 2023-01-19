@@ -30,7 +30,7 @@ jobs:
       - name: prepare mavlink headers
         run: tools/generate_mavlink_headers.sh
       - name: debug
-        run: tree
+        run: ls /home/runner/work/MAVSDK/MAVSDK/mavlink-headers/include/mavlink/v2.0
       - name: setup dockcross
         run: docker run --rm dockcross/${{ matrix.name }} > ./dockcross-${{ matrix.name }}; chmod +x ./dockcross-${{ matrix.name }}
       - uses: actions/cache@v2
