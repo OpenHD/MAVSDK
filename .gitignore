@@ -23,6 +23,3 @@ cmake-build-*
 # Clion IDE settings
 .idea
 
-# mavlink repo to generate mavlink-headers
-mavlink
-mavlink-headers
