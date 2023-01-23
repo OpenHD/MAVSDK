@@ -43,7 +43,7 @@ jobs:
         run: ./dockcross-${{ matrix.name }} cmake --build build/${{ matrix.name }} -j4 --target install
       - name: package
         run: 7z a mavsdk-android.7z build/${{ matrix.name }}/install/
-       - name: Upload to Github
+      - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
           name: "MAVSDK"
