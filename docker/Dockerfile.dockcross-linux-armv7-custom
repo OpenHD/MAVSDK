@@ -2,5 +2,5 @@ FROM dockcross/linux-armv7-lts
 
 ENV DEFAULT_DOCKCROSS_IMAGE mavsdk/mavsdk-dockcross-linux-armv7-custom
 
-RUN apt install rubygems -y
+RUN apt install rubygems python3 python3-pip python3-future -y
 RUN gem install fpm
