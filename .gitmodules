@@ -4,3 +4,6 @@
 [submodule "mavsdk-proto"]
 	path = proto
 	url = https://github.com/mavlink/MAVSDK-Proto.git
+[submodule "mavlink-headers"]
+	path = mavlink-headers
+	url = https://github.com/OpenHD/mavlink-headers.git
