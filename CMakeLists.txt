@@ -46,11 +46,15 @@ set(DEPS_INSTALL_PATH "${DEPS_BUILD_PATH}/install" CACHE PATH "Install path for 
 
 include(GNUInstallDirs)
 
+# OpenHD-specific
+# hard coded since that's the only flavour we use
 set(MAVLINK_DIALECT openhd)
 if (NOT MAVLINK_DIALECT)
     set(MAVLINK_DIALECT common)
 endif()
 
+# hard-coded since that's where the headers are
+set(MAVLINK_HEADERS mavlink-headers)
 if (MAVLINK_HEADERS)
     get_filename_component(MAVLINK_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/${MAVLINK_HEADERS} REALPATH)
     set(MAVLINK_HEADERS ${MAVLINK_HEADERS})
