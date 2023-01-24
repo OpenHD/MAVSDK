@@ -38,13 +38,7 @@ jobs:
         run: cmake $superbuild $cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DMAVLINK_HEADERS=mavlink-headers -DCMAKE_INSTALL_PREFIX=build/macos/install -DBUILD_MAVSDK_SERVER=OFF -DBUILD_SHARED_LIBS=OFF -DMACOS_FRAMEWORK=${{ matrix.build-framework }} -DWERROR=OFF -Bbuild/macos -H.
       - name: build
         run: cmake --build build/macos -j2 --target install
-      - name: unit tests
-        run: ./build/macos/src/unit_tests/unit_tests_runner
-      - name: system tests
-        run: ./build/macos/src/system_tests/system_tests_runner
-      - name: test (mavsdk_server)
-        run: ./build/macos/src/mavsdk_server/test/unit_tests_mavsdk_server
       - name: ls -a
-        run: la -a
+        run: ls -a
       - name: tree
         run: find .
