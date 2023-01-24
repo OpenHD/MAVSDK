@@ -39,6 +39,6 @@ jobs:
       - name: build
         run: cmake --build build/macos -j2 --target install
       - name: ls -a
-        run: la -a
+        run: ls -a
       - name: tree
         run: find .
