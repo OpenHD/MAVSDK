@@ -17,6 +17,6 @@ install(FILES
 )
 
 install(DIRECTORY
-    ${MAVLINK_HEADERS}#Consti10 I had to add a "/mavlink" here, otherwise MAVSDK builds but the installed library cannot be used
+    ${MAVLINK_HEADERS}/mavlink #Consti10 I had to add a "/mavlink" here, otherwise MAVSDK builds but the installed library cannot be used
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/mavsdk/plugins/mavlink_passthrough
 )
