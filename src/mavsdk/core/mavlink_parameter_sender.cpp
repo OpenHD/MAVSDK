@@ -1056,7 +1056,7 @@ int MavlinkParameterSender::get_current_n_retransmissions()
 }
 
 void MavlinkParameterSender::set_timeout_seconds(double timeout_seconds) {
-    m_curr_timeout_seconds=timeout_seconds;
+    m_curr_timeout_seconds=static_cast<float>(timeout_seconds);
 }
 
 void MavlinkParameterSender::set_n_retransmissions(int n_retransmissions) {

@@ -225,7 +225,8 @@ private:
     const bool _use_extended=false;
 
     // default to -1, which means use the timeout specified globally
-    std::atomic<double> m_curr_timeout_seconds{-1};
+    // NOTE: std::atomic<double> is not supported on some platforms, float should be enough
+    std::atomic<float> m_curr_timeout_seconds{-1};
     // default to 3 retransmissions if we do not get the proper ack from the server
     std::atomic<int> m_curr_n_retransmissions{3};
 
