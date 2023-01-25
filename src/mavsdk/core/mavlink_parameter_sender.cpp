@@ -1043,7 +1043,7 @@ bool MavlinkParameterSender::source_matches(uint8_t source_sys_id,uint8_t source
 
 double MavlinkParameterSender::get_current_timeout_seconds()
 {
-    const double custom_timeout=m_curr_timeout_seconds;
+    const auto custom_timeout=static_cast<double>(m_curr_timeout_seconds);
     if(custom_timeout>=0){
         return custom_timeout;
     }
