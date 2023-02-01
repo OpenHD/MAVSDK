@@ -812,7 +812,7 @@ void MavlinkParameterSender::receive_timeout()
             const auto& specific=std::get<WorkItemGet>(work->work_item_variant);
             if (work->retries_to_do > 0) {
                 // We're not sure the command arrived, let's retransmit.
-                LogWarn() << "sending again, retries to do: " << work->retries_to_do;
+                LogWarn() << "sending again, retries to do: " << work->retries_to_do<<" timeout:"<<work->timeout_s;
                 if (!_sender.send_message(work->mavlink_message)) {
                     LogErr() << "connection send error in retransmit ";
                     work_queue_guard->pop_front();
@@ -840,7 +840,7 @@ void MavlinkParameterSender::receive_timeout()
             if (work->retries_to_do > 0) {
                 // We're not sure the command arrived, let's retransmit.
                 LogWarn() << "sending again, retries to do: " << work->retries_to_do << "  ("
-                          << specific.param_name << ").";
+                          << specific.param_name << ")"<<" timeout:"<<work->timeout_s;;
                 if (!_sender.send_message(work->mavlink_message)) {
                     LogErr() << "connection send error in retransmit (" << specific.param_name << ").";
                     work_queue_guard->pop_front();
