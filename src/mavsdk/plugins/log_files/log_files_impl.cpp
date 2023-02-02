@@ -483,16 +483,24 @@ void LogFilesImpl::data_timeout()
 
 bool LogFilesImpl::is_directory(const std::string& path) const
 {
+#ifdef USE_FILESYSTEM_ANYWAYS
     fs::path file_path(path);
     std::error_code ignored;
     return fs::is_directory(file_path, ignored);
+#else
+    return false;
+#endif
 }
 
 bool LogFilesImpl::file_exists(const std::string& path) const
 {
+#ifdef USE_FILESYSTEM_ANYWAYS
     fs::path file_path(path);
     std::error_code ignored;
     return fs::exists(file_path, ignored);
+#else
+    return false;
+#endif
 }
 
 bool LogFilesImpl::start_logfile(const std::string& path)

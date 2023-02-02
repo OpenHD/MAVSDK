@@ -132,6 +132,7 @@ bool fs_rename(const std::string& old_name, const std::string& new_name)
 // Inspired by https://stackoverflow.com/a/58454949/8548472
 std::optional<std::string> create_tmp_directory(const std::string& prefix)
 {
+#ifdef USE_FILESYSTEM_ANYWAYS
     const auto tmp_dir = fs::temp_directory_path();
 
     std::random_device dev;
@@ -153,6 +154,9 @@ std::optional<std::string> create_tmp_directory(const std::string& prefix)
 
     LogErr() << "Could not create a temporary directory, aborting.";
     return {};
+#else
+    return std::nullopt;
+#endif //USE_FILESYSTEM_ANYWAYS
 }
 
 } // namespace mavsdk
