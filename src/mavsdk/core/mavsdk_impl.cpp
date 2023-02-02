@@ -703,8 +703,8 @@ void MavsdkImpl::process_user_callbacks_thread()
                     LogWarn() << "Callback called from " << callback.value().filename << ":"
                               << callback.value().linenumber << " took more than " << timeout_s
                               << " second to run.";
-                    fflush(stdout);
-                    fflush(stderr);
+                    //fflush(stdout);
+                    //fflush(stderr);
                     abort();
                 } else {
                     LogWarn()
