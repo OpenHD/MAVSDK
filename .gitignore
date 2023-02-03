@@ -23,3 +23,5 @@ cmake-build-*
 # Clion IDE settings
 .idea
 
+build/*
+
