@@ -10,6 +10,8 @@ jobs:
   dockcross-android:
     name: ${{ matrix.name }}
     runs-on: ubuntu-22.04
+    container:
+      image: rabits/qt:5.15-android
     strategy:
       matrix:
         include:
@@ -25,24 +27,15 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-      - name: install custom docross
-        run: git clone https://github.com/openhd/dockcross.git && cd dockcross
-      - name: setup dockcross
-        run: docker run --rm dockcross/${{ matrix.name }} > ./dockcross-${{ matrix.name }}; chmod +x ./dockcross-${{ matrix.name }}
-      - uses: actions/cache@v2
-        id: cache
-        with:
-          path: ./build/${{ matrix.name }}/third_party/install
-          key: ${{ github.job }}-${{ matrix.name }}-${{ hashFiles('./third_party/**') }}
-      - name: disable superbuild on cache hit
+       - name: disable superbuild on cache hit
         if: steps.cache.outputs.cache-hit == 'true'
         run: echo "superbuild=-DSUPERBUILD=OFF" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=/work/build/${{ matrix.name }}/third_party/install" >> $GITHUB_ENV
       - name: configure
-        run: ./dockcross-${{ matrix.name }} /bin/bash -c "cmake $superbuild $cmake_prefix_path -DMAVLINK_DIALECT=openhd -DMAVLINK_HEADERS=mavlink-headers -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/${{ matrix.name }}/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/${{ matrix.name }} -H."
+        run: /bin/bash -c "cmake $superbuild $cmake_prefix_path -DMAVLINK_DIALECT=openhd -DMAVLINK_HEADERS=mavlink-headers -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/${{ matrix.name }}/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/${{ matrix.name }} -H."
       - name: debug
         run: tree
       - name: build
-        run: ./dockcross-${{ matrix.name }} cmake --build build/${{ matrix.name }} -j4 --target install
+        run: cmake --build build/${{ matrix.name }} -j4 --target install
       - name: package
         run: 7z a mavsdk-android-${{ matrix.name }}.7z build/${{ matrix.name }}/install/
       - name: Upload to Github
