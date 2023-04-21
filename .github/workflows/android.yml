@@ -28,7 +28,7 @@ jobs:
       - name: install custom docross
         run: git clone https://github.com/openhd/dockcross.git && cd dockcross
       - name: setup dockcross
-        run: ./dockcross-${{ matrix.name }}; chmod +x ./dockcross-${{ matrix.name }}
+        run: docker run --rm dockcross/${{ matrix.name }} > ./dockcross-${{ matrix.name }}; chmod +x ./dockcross-${{ matrix.name }}
       - uses: actions/cache@v2
         id: cache
         with:
