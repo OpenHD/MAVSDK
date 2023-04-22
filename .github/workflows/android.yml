@@ -23,11 +23,11 @@ jobs:
       - name: apt update
         run: sudo apt update
       - name: install cmake and build dependencies
-        run: sudo apt -y install tree build-essential cmake git ruby-dev python3-pip cmake curl libjsoncpp-dev libtinyxml2-dev zlib1g libcurl4-gnutls-dev
+        run: sudo apt -y install build-essential cmake git ruby-dev python3-pip cmake curl libjsoncpp-dev libtinyxml2-dev zlib1g libcurl4-gnutls-dev
       - name: debug
-        run: cd MAVSDK && ls -a && tree
+        run: cd MAVSDK && ls -a
       - name: configure
-        run: sudo cmake -DSUPERBUILD=OFF -DMAVLINK_DIALECT=openhd -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -H..
+        run: sudo cmake -DSUPERBUILD=OFF -DMAVLINK_DIALECT=openhd -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF
       - name: debug
         run: tree
       - name: build
