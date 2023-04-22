@@ -25,7 +25,7 @@ jobs:
       - name: debug
         run: tree
       - name: build
-        run: cmake --build build/${{ matrix.name }} -j4 --target install
+        run: sudo cmake --build build/${{ matrix.name }} -j4 --target install
       - name: package
         run: 7z a mavsdk-android-${{ matrix.name }}.7z build/${{ matrix.name }}/install/
       - name: Upload to Github
