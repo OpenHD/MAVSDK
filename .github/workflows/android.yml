@@ -11,7 +11,7 @@ jobs:
     name: ${{ matrix.name }}
     runs-on: ubuntu-22.04
     container:
-      image: dockcross/android-arm64
+      image: dockcross/android-arm64:20190602-f5c380f
     strategy:
       matrix:
         include:
