@@ -21,7 +21,7 @@ jobs:
       - name:
         run: sudo git clone https://github.com/openhd/MAVSDK
       - name: install cmake and build dependencies
-        run: apt -y install build-essential cmake git ruby-dev python3-pip cmake curl libjsoncpp-dev libtinyxml2-dev zlib1g libcurl4-gnutls-dev
+        run: sudo apt -y install build-essential cmake git ruby-dev python3-pip cmake curl libjsoncpp-dev libtinyxml2-dev zlib1g libcurl4-gnutls-dev
       - name: configure
         run: sudo cmake -DSUPERBUILD=OFF -DMAVLINK_DIALECT=openhd -DMAVLINK_HEADERS=mavlink-headers -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/${{ matrix.name }}/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/${{ matrix.name }} -H.
       - name: debug
