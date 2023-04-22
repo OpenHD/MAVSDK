@@ -23,7 +23,6 @@ jobs:
           path: ./build/release/third_party/install
           key: ${{ github.job }}-${{ hashFiles('./third_party/**') }}-2
       - name: disable superbuild on cache hit
-        if: steps.cache.outputs.cache-hit == 'true'
         run: |
             echo "superbuild=-DSUPERBUILD=OFF" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
             echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=$(pwd)/build/release/third_party/install" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -35,7 +34,6 @@ jobs:
       - name: build
         run: cmake --build build/release -j2 --config Release --target install
       - name: Create zip file mavsdk libraries
-        if: startsWith(github.ref, 'refs/tags/v')
         run: cd build/release/install && 7z.exe a -tzip ../../../mavsdk-windows-x64-release.zip . && cd ../../..
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
