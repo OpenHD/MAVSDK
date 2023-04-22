@@ -15,8 +15,6 @@ jobs:
         include:
           - name: android-arm
             arch: armeabi-v7a
-          - name: android-arm64
-            arch: arm64-v8a
           - name: android-x86
             arch: x86
           - name: android-x86_64
