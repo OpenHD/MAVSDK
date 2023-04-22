@@ -20,6 +20,8 @@ jobs:
     steps:
       - name:
         run: sudo git clone https://github.com/openhd/MAVSDK
+      - name: apt update
+        run: sudo apt update
       - name: install cmake and build dependencies
         run: sudo apt -y install build-essential cmake git ruby-dev python3-pip cmake curl libjsoncpp-dev libtinyxml2-dev zlib1g libcurl4-gnutls-dev
       - name: configure
