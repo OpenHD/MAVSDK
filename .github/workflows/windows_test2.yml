@@ -30,7 +30,7 @@ jobs:
         run: |
             choco install nasm
       - name: configure
-        run: cmake -G "Visual Studio 17 2022" $env:superbuild $env:cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/release/install -DBUILD_MAVSDK_SERVER=ODD -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/release -S.
+        run: cmake -G "Visual Studio 17 2022" -DSUPERBUILD=OFF $env:cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/release/install -DBUILD_MAVSDK_SERVER=ODD -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/release -S.
       - name: build
         run: cmake --build build/release -j2 --config Release --target install
       - name: Create zip file mavsdk libraries
