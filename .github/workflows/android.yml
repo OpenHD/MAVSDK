@@ -11,7 +11,7 @@ jobs:
     name: ${{ matrix.name }}
     runs-on: ubuntu-22.04
     container:
-      image: dockcross/android-arm64:20190602-f5c380f
+      image: dockcross/android-arm64:20201222-0217db3
     strategy:
       matrix:
         include:
@@ -24,7 +24,7 @@ jobs:
 
       - name: disable superbuild on cache hit
         if: steps.cache.outputs.cache-hit == 'true'
-        run: echo "superbuild=-DSUPERBUILD=ON" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=/work/build/${{ matrix.name }}/third_party/install" >> $GITHUB_ENV
+        run: echo "superbuild=-DSUPERBUILD=OFF" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=/work/build/${{ matrix.name }}/third_party/install" >> $GITHUB_ENV
       - name: configure
         run: cmake $superbuild $cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/${{ matrix.name }}/install -DBUILD_MAVSDK_SERVER=OFF -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -DMAVLINK_HEADERS=mavlink-headers/include -Bbuild/${{ matrix.name }} -H.
       - name: build
