@@ -22,10 +22,6 @@ jobs:
         with:
           path: ./build/release/third_party/install
           key: ${{ github.job }}-${{ hashFiles('./third_party/**') }}-2
-      - name: disable superbuild on cache hit
-        run: |
-            echo "superbuild=-DSUPERBUILD=OFF" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-            echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=$(pwd)/build/release/third_party/install"
       - name: install packages
         run: |
             choco install nasm
