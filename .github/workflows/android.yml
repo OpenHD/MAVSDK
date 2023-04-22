@@ -27,7 +27,7 @@ jobs:
       - name: debug
         run: cd MAVSDK && ls -a
       - name: configure
-        run: sudo cmake -DSUPERBUILD=OFF -DMAVLINK_DIALECT=openhd -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF
+        run: sudo cmake . -DSUPERBUILD=OFF -DMAVLINK_DIALECT=openhd -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF
       - name: debug
         run: tree
       - name: build
