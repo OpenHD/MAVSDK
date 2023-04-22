@@ -33,7 +33,7 @@ jobs:
       - name: create tar with header and library
         run: mkdir -p build/${{ matrix.name }}/export/include; mkdir -p build/${{ matrix.name }}/export/${{ matrix.arch }};
       - name: package
-        run: 7z a test.7z /__w/MAVSDK/MAVSDK/build/build/
+        run: 7z a test.7z /__w/MAVSDK/MAVSDK/build/android-arm64/install/
       - name: Upload to Github
         uses: 'actions/upload-artifact@v2'
         with:
