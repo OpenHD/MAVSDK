@@ -15,22 +15,13 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: android-arm
-            arch: armeabi-v7a
           - name: android-arm64
             arch: arm64-v8a
-          - name: android-x86
-            arch: x86
-          - name: android-x86_64
-            arch: x86_64
     steps:
       - name:
         run: sudo git clone https://github.com/openhd/MAVSDK
-      - name: disable superbuild on cache hit
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: echo "superbuild=-DSUPERBUILD=OFF" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=/work/build/${{ matrix.name }}/third_party/install" >> $GITHUB_ENV
       - name: configure
-        run: /bin/bash -c "cmake $superbuild $cmake_prefix_path -DMAVLINK_DIALECT=openhd -DMAVLINK_HEADERS=mavlink-headers -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/${{ matrix.name }}/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/${{ matrix.name }} -H."
+        run: sudo cmake -DSUPERBUILD=OFF -DMAVLINK_DIALECT=openhd -DMAVLINK_HEADERS=mavlink-headers -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/${{ matrix.name }}/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/${{ matrix.name }} -H."
       - name: debug
         run: tree
       - name: build
