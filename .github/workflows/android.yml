@@ -24,9 +24,8 @@ jobs:
           - name: android-x86_64
             arch: x86_64
     steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: recursive
+      - name:
+        run: git clone https://github.com/openhd/MAVSDK
       - name: disable superbuild on cache hit
         if: steps.cache.outputs.cache-hit == 'true'
         run: echo "superbuild=-DSUPERBUILD=OFF" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=/work/build/${{ matrix.name }}/third_party/install" >> $GITHUB_ENV
