@@ -22,7 +22,7 @@ jobs:
         with:
           submodules: recursive
       - name: install 7z
-        run: apt update && apt install p7zip-full
+        run: apt update && apt install p7zip-full -y
       - name: disable superbuild on cache hit
         if: steps.cache.outputs.cache-hit == 'true'
         run: echo "superbuild=-DSUPERBUILD=OFF" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=/work/build/${{ matrix.name }}/third_party/install" >> $GITHUB_ENV
