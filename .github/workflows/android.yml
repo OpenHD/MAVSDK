@@ -18,20 +18,19 @@ jobs:
           - name: android-arm64
             arch: arm64-v8a
     steps:
-      - name:
-        run: sudo git clone -b 2.3.x-evo https://github.com/openhd/MAVSDK --recursive && cd MAVSDK
-      - name: apt update
-        run: sudo apt update
-      - name: install cmake and build dependencies
-        run: sudo apt -y install build-essential cmake git ruby-dev python3-pip cmake curl libjsoncpp-dev libtinyxml2-dev zlib1g libcurl4-gnutls-dev
-      - name: debug
-        run: cd MAVSDK && ls -a
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: disable superbuild on cache hit
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: echo "superbuild=-DSUPERBUILD=OFF" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=/work/build/${{ matrix.name }}/third_party/install" >> $GITHUB_ENV
       - name: configure
-        run: sudo cmake MAVSDK -DSUPERBUILD=OFF -DMAVLINK_DIALECT=openhd -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF
-      - name: debug
-        run: tree
+        run: cmake $superbuild $cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/${{ matrix.name }}/install -DBUILD_MAVSDK_SERVER=ON -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -DMAVLINK_HEADERS=mavlink-headers/include -Bbuild/${{ matrix.name }} -H.
       - name: build
-        run: sudo cmake --build build/${{ matrix.name }} -j4 --target install
+        run: cmake --build build/${{ matrix.name }} -j2 --target install
+      - name: create tar with header and library
+        run: mkdir -p build/${{ matrix.name }}/export/include; cp build/${{ matrix.name }}/install/include/mavsdk/mavsdk_server/mavsdk_server_api.h build/${{ matrix.name }}/export/include; mkdir -p build/${{ matrix.name }}/export/${{ matrix.arch }}; cp build/${{ matrix.name }}/install/lib/libmavsdk_server.so build/${{ matrix.name }}/export/${{ matrix.arch }}; tar -C build/${{ matrix.name }}/export -cf build/${{ matrix.name }}/export/mavsdk_server_${{ matrix.name }}.tar ${{ matrix.arch }} include;
       - name: package
         run: 7z a mavsdk-android-${{ matrix.name }}.7z build/${{ matrix.name }}/install/
       - name: Upload to Github
