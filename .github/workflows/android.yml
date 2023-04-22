@@ -26,7 +26,7 @@ jobs:
         if: steps.cache.outputs.cache-hit == 'true'
         run: echo "superbuild=-DSUPERBUILD=OFF" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=/work/build/${{ matrix.name }}/third_party/install" >> $GITHUB_ENV
       - name: configure
-        run: cmake $superbuild $cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/${{ matrix.name }}/install -DBUILD_MAVSDK_SERVER=ON -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -DMAVLINK_HEADERS=mavlink-headers/include -Bbuild/${{ matrix.name }} -H.
+        run: cmake $superbuild $cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/${{ matrix.name }}/install -DBUILD_MAVSDK_SERVER=OFF -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -DMAVLINK_HEADERS=mavlink-headers/include -Bbuild/${{ matrix.name }} -H.
       - name: build
         run: cmake --build build/${{ matrix.name }} -j2 --target install
       - name: create tar with header and library
