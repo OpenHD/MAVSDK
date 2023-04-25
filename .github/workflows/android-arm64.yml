@@ -1,0 +1,44 @@
+name: Build Android ARM64-v8a
+
+on: [push]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  dockcross-android:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-22.04
+    container:
+      image: dockcross/android-arm64:20201222-0217db3
+    strategy:
+      matrix:
+        include:
+          - name: android-arm64
+            arch: arm64-v8a
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: install 7z
+        run: apt update && apt install p7zip-full -y
+      - name: disable superbuild on cache hit
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: echo "superbuild=-DSUPERBUILD=OFF" >> $GITHUB_ENV && echo "cmake_prefix_path=-DCMAKE_PREFIX_PATH=/work/build/${{ matrix.name }}/third_party/install" >> $GITHUB_ENV
+      - name: configure
+        run: cmake $superbuild $cmake_prefix_path -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/${{ matrix.name }}/install -DBUILD_MAVSDK_SERVER=OFF -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -DMAVLINK_HEADERS=mavlink-headers/include -Bbuild/${{ matrix.name }} -H.
+      - name: build
+        run: cmake --build build/${{ matrix.name }} -j2 --target install
+      - name: create tar with header and library
+        run: mkdir -p build/${{ matrix.name }}/export/include; mkdir -p build/${{ matrix.name }}/export/${{ matrix.arch }};
+      - name: package
+        run: 7z a mavsdk-android-arm64-v8a.7z /__w/MAVSDK/MAVSDK/build/android-arm64/install/
+      - name: Upload to Github
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: "MAVSDK-${{ matrix.name }}"
+          path: |
+            *.7z
+            MAVSDK/*.7z
+     

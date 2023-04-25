@@ -48,4 +48,4 @@ Quick Links:
 
 ## License
 
-This project is licensed under the permissive BSD 3-clause, see [LICENSE.md](LICENSE.md). 
+This project is licensed under the permissive BSD 3-clause, see [LICENSE.md](LICENSE.md).

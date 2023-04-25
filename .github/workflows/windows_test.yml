@@ -1,4 +1,4 @@
-name: Windows Release
+name: Windows Release test
 
 on: [push]
 
@@ -24,7 +24,6 @@ jobs:
           update: true
           install: >-
             p7zip
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -53,7 +52,7 @@ jobs:
           python3 -m pip install wheel
           python3 -m pip install future
           cmake -DCMAKE_INSTALL_PREFIX=build/debug/install -DBUILD_SHARED_LIBS=OFF -DWERROR=OFF -Bbuild/debug -H. -DCMAKE_BUILD_TYPE=Release -DMAVLINK_DIALECT=openhd -DMAVLINK_HEADERS=mavlink-headers
-          cmake --build build/debug -j8 --config Debug --target install
+          cmake --build build/debug -j8 --target install
           ls -a
       
       - name: Create zip file mavsdk libraries
