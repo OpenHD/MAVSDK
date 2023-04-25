@@ -81,6 +81,13 @@ ConnectionResult UdpConnection::setup_port()
     inet_pton(AF_INET, _local_ip.c_str(), &(addr.sin_addr));
     addr.sin_port = htons(_local_port_number);
 
+    // TODO needed ?
+    // Without setting reuse, this might block infinite on some platforms
+    /*int enable = 1;
+    if (setsockopt(_socket_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0){
+        LogWarn()<<"Cannot set socket reuse"; // warn,but continue anyway.
+    }*/
+
     if (bind(_socket_fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0) {
         LogErr() << "bind error: " << GET_ERROR(errno);
         return ConnectionResult::BindError;
