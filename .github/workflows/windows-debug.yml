@@ -36,4 +36,4 @@ jobs:
         with:
           name: "MAVSDK"
           path: |
-            build/debug/install*
+            build/debug/install/*
