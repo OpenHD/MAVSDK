@@ -1,4 +1,4 @@
-name: Windows Release test2
+name: Windows Release
 
 on: [push]
 
@@ -36,5 +36,4 @@ jobs:
         with:
           name: "MAVSDK"
           path: |
-            *.zip
-            *.exe
+            build/release/install/*
