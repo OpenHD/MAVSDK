@@ -214,7 +214,7 @@ Mocap::Result MocapImpl::send_odometry(const Mocap::Odometry& odometry)
         return Mocap::Result::InvalidRequestData;
     }
 
-    mavlink_msg_odometry_pack(
+    /*mavlink_msg_odometry_pack(
         _parent->get_own_system_id(),
         _parent->get_own_component_id(),
         &message,
@@ -234,7 +234,7 @@ Mocap::Result MocapImpl::send_odometry(const Mocap::Odometry& odometry)
         pose_covariance.data(),
         velocity_covariance.data(),
         0,
-        MAV_ESTIMATOR_TYPE_MOCAP);
+        MAV_ESTIMATOR_TYPE_MOCAP);*/
 
     return _parent->send_message(message) ? Mocap::Result::Success : Mocap::Result::ConnectionError;
 }

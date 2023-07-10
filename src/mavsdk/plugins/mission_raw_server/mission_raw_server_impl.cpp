@@ -345,11 +345,11 @@ void MissionRawServerImpl::set_current_seq(std::size_t seq)
     }
 
     mavlink_message_t mission_current;
-    mavlink_msg_mission_current_pack(
+    /*mavlink_msg_mission_current_pack(
         _server_component_impl->get_own_system_id(),
         _server_component_impl->get_own_component_id(),
         &mission_current,
-        static_cast<uint16_t>(_current_seq));
+        static_cast<uint16_t>(_current_seq));*/
     _server_component_impl->send_message(mission_current);
 }
 

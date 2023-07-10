@@ -363,7 +363,7 @@ std::optional<mavlink_message_t> CameraServerImpl::process_camera_information_re
     }
 
     mavlink_message_t msg{};
-    mavlink_msg_camera_information_pack(
+    /*mavlink_msg_camera_information_pack(
         _server_component_impl->get_own_system_id(),
         _server_component_impl->get_own_component_id(),
         &msg,
@@ -379,7 +379,7 @@ std::optional<mavlink_message_t> CameraServerImpl::process_camera_information_re
         _information.lens_id,
         capability_flags,
         _information.definition_file_version,
-        _information.definition_file_uri.c_str());
+        _information.definition_file_uri.c_str());*/
 
     _server_component_impl->send_message(msg);
     LogDebug() << "sent info msg";
